@@ -1,0 +1,1 @@
+﻿global using car_rental.Domain.Identity.Models;
