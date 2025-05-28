@@ -31,20 +31,16 @@ namespace car_rental.Infrastructure.Data
             // seeding Data
             modelBuilder.Entity<Feature>().HasData(new List<Feature>
             {
-                new Feature { Id = 1 , Name = "Sedan" },
-                new Feature { Id = 2 , Name = "SUV" },
-                new Feature { Id = 3 , Name = "Coupe" },
-                new Feature { Id = 4 , Name = "Convertible" },
-                new Feature { Id = 5 , Name = "Heated Seats" },
-                new Feature { Id = 6 , Name = "Leather Interior" },
-                new Feature { Id = 7 , Name = "Panoramic Roof" },
-                new Feature { Id = 8 , Name = "Off-Road" },
-                new Feature { Id = 9 , Name = "Family" },
-                new Feature { Id = 10, Name = "Business" },
-                new Feature { Id = 11, Name = "Luxury" },
-                new Feature { Id = 12, Name = "Exotic"},
-                new Feature { Id = 13, Name = "V12" },
-                new Feature { Id = 14, Name = "Sport" },
+                new Feature { Id = 1 , Name = "Heated Seats" },
+                new Feature { Id = 2 , Name = "Leather Interior" },
+                new Feature { Id = 3 , Name = "Panoramic Roof" },
+                new Feature { Id = 4 , Name = "Off-Road" },
+                new Feature { Id = 5 , Name = "Family" },
+                new Feature { Id = 6, Name = "Business" },
+                new Feature { Id = 7, Name = "Luxury" },
+                new Feature { Id = 8, Name = "Exotic"},
+                new Feature { Id = 9, Name = "V12" },
+                new Feature { Id = 10, Name = "Sport" },
 
             });
 

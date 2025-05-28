@@ -15,6 +15,7 @@ namespace car_rental.Domain.Entities
         public int Year { get; set; }
         public CarTransmission carTransmission { get; set; }
         public CarFuel carFuel { get; set; }
+        public CarBodyType carBodyType { get; set; }
         public bool IsExist { get; set; } = true;
 
 
