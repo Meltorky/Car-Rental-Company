@@ -8,7 +8,7 @@ using car_rental.Domain.Enums;
 
 namespace car_rental.Domain.Entities
 {
-    public class Car : BaseEntity
+    public class Car : BaseEntity<Car>
     {
         public byte[] CarImage { get; set; } = Array.Empty<byte>();
         public double PricePerDay { get; set; }

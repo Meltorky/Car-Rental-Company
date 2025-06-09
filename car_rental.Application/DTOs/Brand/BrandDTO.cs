@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace car_rental.Domain.Entities
+namespace car_rental.Application.DTOs.Brand
 {
-    public class BaseEntity<T> where T : class
+    public class BrandDTO
     {
-        [Key]
         public int Id { get; set; }
-
-        [Required, MaxLength(100)]
         public string Name { get; set; } = string.Empty;
+        public string ImageURL { get; set; } = string.Empty ;
     }
 }

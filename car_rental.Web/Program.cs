@@ -1,8 +1,3 @@
-using car_rental.Domain.Identity.Models;
-using car_rental.Infrastructure.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +19,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages(); // Add this line
 
+// DI of Services Interfaces
+builder.Services.AddScoped<IFeatureService,FeatureService>();
+builder.Services.AddScoped<IBrandService,BrandService>();
+
+// DI of Repository Interfaces
+builder.Services.AddScoped<IBrandRepository,BrandRepository>();
+builder.Services.AddScoped<IFeatureRepository,FeatureRepository>();
 
 var app = builder.Build();
 

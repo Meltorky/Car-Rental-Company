@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace car_rental.Domain.Entities
+namespace car_rental.Application.DTOs.Feature
 {
-    public class BaseEntity<T> where T : class
+    public class FeatureDTO
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required]
         public string Name { get; set; } = string.Empty;
     }
 }

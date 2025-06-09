@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace car_rental.Domain.Entities
 {
-    public class Feature : BaseEntity
+    public class Feature : BaseEntity<Feature>
     {
         // navigation properties 
 

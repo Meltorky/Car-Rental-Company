@@ -1,1 +1,9 @@
 ﻿global using car_rental.Domain.Identity.Models;
+global using car_rental.Application.Interfaces.IRepositories;
+global using car_rental.Application.Interfaces.IServices;
+global using car_rental.Application.Services;
+global using car_rental.Infrastructure.Data;
+global using car_rental.Infrastructure.Repositories;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.UI.Services;
+global using Microsoft.EntityFrameworkCore;

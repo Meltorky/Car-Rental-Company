@@ -1,0 +1,94 @@
+﻿@model FeatureViewModel;
+
+@{
+	ViewData["Title"] = "Features";
+}
+
+<form id="featureForm" asp-controller="Features" asp-action="Create" method="post" enctype="multipart/form-data">
+	<input type="hidden" asp-for="FormModel.Id" id="featureId" hidden />
+
+	<div class="row">
+		<h2 class="fw-bolder mt-2">Features Manager</h2>
+		<div class="col-md-10 fw-bolder d-flex justify-content-start mt-2 mb-3">
+			<div class="form-group me-4">
+				<input class="form-control" asp-for="FormModel.Name" id="featureName" placeholder="Add a new feature" type="text" required />
+				<span asp-validation-for="FormModel.Name" class="text-danger fw-bolder"></span>
+			</div>
+
+			<button id="addBtn" type="submit" class="btn btn-secondary fw-bolder">Add</button>
+			<button id="saveBtn" type="submit" class="btn btn-success fw-bolder d-none me-2">Save</button>
+			<button id="cancelBtn" type="button" class="btn btn-danger fw-bolder d-none">Cancel</button>
+		</div>
+	</div>
+</form>
+
+<div class="row">
+	<table class="table table-striped text-center align-items-center fw-bold">
+		<thead>
+			<tr class="text-secondary fs-6 fw-bolder">
+				<th>ID</th>
+				<th>Feature Name</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var feature in Model.Features)
+			{
+				<tr>
+					<td>@feature.Id</td>
+					<td>@feature.Name</td>
+					<td>
+						<div>
+							<button type="button" class="btn btn-success me-3 editBtn"
+									data-id="@feature.Id"
+									data-name="@feature.Name">
+								<i class="bi bi-pencil-fill"></i>
+							</button>
+							<form asp-action="Delete" asp-route-id="@feature.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this feature?');">
+								<button type="submit" class="btn btn-danger">
+									<i class="bi bi-trash3"></i>
+								</button>
+							</form>
+
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		document.querySelectorAll('.editBtn').forEach(btn => {
+			btn.addEventListener('click', function () {
+				const id = this.getAttribute('data-id');
+				const name = this.getAttribute('data-name');
+
+				document.getElementById('featureId').value = id;
+				document.getElementById('featureName').value = name;
+
+				// Change form action to Update
+				const form = document.getElementById('featureForm');
+				form.action = '/Features/Edit'; // Add Edit POST action in controller
+
+				document.getElementById('addBtn').classList.add('d-none');
+				document.getElementById('saveBtn').classList.remove('d-none');
+				document.getElementById('cancelBtn').classList.remove('d-none');
+			});
+		});
+
+		document.getElementById('cancelBtn').addEventListener('click', function () {
+			document.getElementById('featureForm').reset();
+			document.getElementById('featureId').value = '';
+
+			const form = document.getElementById('featureForm');
+			form.action = '/Features/Create';
+
+			document.getElementById('addBtn').classList.remove('d-none');
+			document.getElementById('saveBtn').classList.add('d-none');
+			document.getElementById('cancelBtn').classList.add('d-none');
+		});
+	</script>
+}

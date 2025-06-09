@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace car_rental.Domain.Entities
 {
-    public class Brand : BaseEntity
+    public class Brand : BaseEntity<Brand>
     {
         public string ImageUrl { get; set; } = string.Empty;
 
