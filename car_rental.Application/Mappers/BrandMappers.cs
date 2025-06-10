@@ -19,7 +19,7 @@ namespace car_rental.Application.Mappers
                 { 
                     Id = brand.Id,
                     Name = brand.Name,
-                    ImageURL = brand.Name
+                    ImageURL = brand.ImageUrl
                 });
             }
             return dtoList;
@@ -29,7 +29,7 @@ namespace car_rental.Application.Mappers
         {
             Id = brand.Id,
             Name = brand.Name,
-            ImageURL = brand.Name
+            ImageURL = brand.ImageUrl
         };
     }
 }

@@ -24,4 +24,9 @@
     <ProjectReference Include="..\car_rental.Infrastructure\car_rental.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\images\Brands\" />
+  </ItemGroup>
+	
+
 </Project>

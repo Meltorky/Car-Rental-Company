@@ -20,10 +20,10 @@ namespace car_rental.Infrastructure.Repositories
         {
             return await _context.Set<T>().FindAsync(Id);
         }
-        public async Task Add(T entity)
+        public async Task<bool> Add(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
         public async Task<bool> Update(T entity)
         {

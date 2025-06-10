@@ -12,5 +12,8 @@ namespace car_rental.Application.Interfaces.IServices
     {
         Task<BrandDTO?> GetById(int id);
         Task<List<BrandDTO>> GetAll();
+        Task<bool> Add(BrandFormDTO dto);
+        Task<bool?> Edit(BrandFormDTO dto);
+        Task<bool> Remove(int Id);
     }
 }

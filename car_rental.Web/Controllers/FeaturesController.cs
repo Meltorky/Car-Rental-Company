@@ -36,9 +36,8 @@ namespace car_rental.Web.Controllers
                     Console.WriteLine(error.ErrorMessage);
                 }
 
-                viewModel.Features = await _featureService.GetAll();
+                //viewModel.Features = await _featureService.GetAll();
                 return View(nameof(Index), viewModel); 
-
             }
 
             await _featureService.Add(viewModel.FormModel);

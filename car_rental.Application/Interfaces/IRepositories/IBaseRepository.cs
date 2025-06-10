@@ -10,7 +10,7 @@ namespace car_rental.Application.Interfaces.IRepositories
     {
         Task<T?> GetById(int Id);
         Task<List<T>> GetAll();
-        Task Add(T entity);
+        Task<bool> Add(T entity);
         Task<bool> Update(T entity);
         Task<bool> Delete(T entity);
     }
