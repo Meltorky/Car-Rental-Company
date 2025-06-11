@@ -25,7 +25,7 @@
 
 			<div class="form-group mt-3">
 				<label class="form-label fw-bolder">Brand Logo</label>
-				<input type="file" class="form-control" asp-for="BrandFormDTO.LogoFile" id="brandLogo" />
+				<input type="file" class="form-control" asp-for="BrandFormDTO.LogoFile" id="brandLogo" required />
 				<span asp-validation-for="BrandFormDTO.LogoFile" class="text-danger"></span>
 			</div>
 
@@ -110,6 +110,9 @@
 				$('#formTitle').html(`<i class="bi bi-pencil-square"></i> Edit Brand`);
 				$('#brandForm').attr('action', '/Brands/Edit');
 
+				// Make file input not required in edit
+				$('#brandLogo').removeAttr('required');
+
 				$('#addBtn').addClass('d-none');
 				$('#saveBtn').removeClass('d-none');
 				$('#cancelBtn').removeClass('d-none');
@@ -157,5 +160,18 @@
 		background-color: #dc3545;
 		border-color: #dc3545;
 		color: white;
+	}
+
+	@@media (max-width: 576px) {
+		.d-flex.gap-2
+
+	{
+		flex-direction: column;
+	}
+
+	.d-flex.gap-2 .flex-fill {
+		width: 100% !important;
+	}
+
 	}
 </style>

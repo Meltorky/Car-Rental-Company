@@ -88,8 +88,11 @@ namespace car_rental.Application.Services
             return result;
         }
 
-        private async Task<string> SaveBrandLogo(IFormFile file) 
+        private async Task<string> SaveBrandLogo(IFormFile? file) 
         {
+            if (file is null)
+                return string.Empty;
+
             var logoName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var fullPath = Path.Combine(_storagePath,logoName);
 

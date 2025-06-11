@@ -21,19 +21,22 @@ builder.Services.AddRazorPages(); // Add this line
 
 // DI of Services Interfaces
 builder.Services.AddScoped<IFeatureService,FeatureService>();
-//builder.Services.AddScoped<IBrandService,BrandService>();
-
-// DI of Repository Interfaces
-builder.Services.AddScoped<IBrandRepository,BrandRepository>();
-builder.Services.AddScoped<IFeatureRepository,FeatureRepository>();
-
-// inject the IWebHostEnvironment in the services
+builder.Services.AddScoped<ICarService,CarService>();
 builder.Services.AddScoped<IBrandService>(provider =>
 {
+    // inject the IWebHostEnvironment in the services
+
     var env = provider.GetRequiredService<IWebHostEnvironment>();
     var repo = provider.GetRequiredService<IBrandRepository>();
     return new BrandService(repo, env.WebRootPath);
 });
+
+// DI of Repository Interfaces
+builder.Services.AddScoped<IBrandRepository,BrandRepository>();
+builder.Services.AddScoped<IFeatureRepository,FeatureRepository>();
+builder.Services.AddScoped<ICarRepository,CarRepository>();
+
+
 
 
 var app = builder.Build();

@@ -1,0 +1,69 @@
+﻿@model CarFormViewModel
+
+@{
+    ViewData["Title"] = "Create New Car";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" asp-controller="Car" method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.BrandId" class="control-label">Brand</label>
+        <select asp-for="CarFormDTO.FeatureIds" asp-items="Model.BrandList" class="form-control"></select>
+        <span asp-validation-for="CarFormDTO.BrandId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.Name" class="control-label"></label>
+        <input asp-for="CarFormDTO.Name" class="form-control" />
+        <span asp-validation-for="CarFormDTO.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.CarImage" class="control-label">Car Image</label>
+        <input asp-for="CarFormDTO.CarImage" type="file" class="form-control-file" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.PricePerDay" class="control-label"></label>
+        <input asp-for="CarFormDTO.PricePerDay" class="form-control" />
+        <span asp-validation-for="CarFormDTO.PricePerDay" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.Year" class="control-label"></label>
+        <input asp-for="CarFormDTO.Year" class="form-control" />
+        <span asp-validation-for="CarFormDTO.Year" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.CarTransmission" class="control-label"></label>
+        <select asp-for="CarFormDTO.CarTransmission" asp-items="Model.CarTransmissionList" class="form-control"></select>
+        <span asp-validation-for="CarFormDTO.CarTransmission" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.CarFuel" class="control-label"></label>
+        <select asp-for="CarFormDTO.CarFuel" asp-items="Model.CarFuelList" class="form-control"></select>
+        <span asp-validation-for="CarFormDTO.CarFuel" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.CarBodyType" class="control-label"></label>
+        <select asp-for="CarFormDTO.CarBodyType" asp-items="Model.BodyTypeList" class="form-control"></select>
+        <span asp-validation-for="CarFormDTO.CarBodyType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarFormDTO.FeatureIds" class="control-label">Car Features</label>
+        <select asp-for="CarFormDTO.FeatureIds" asp-items="Model.FeatureList" multiple class="form-control"></select>
+        <span asp-validation-for="CarFormDTO.FeatureIds" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
