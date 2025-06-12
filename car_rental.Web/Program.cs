@@ -1,4 +1,6 @@
 
+using car_rental.Web.UIService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
@@ -36,7 +38,8 @@ builder.Services.AddScoped<IBrandRepository,BrandRepository>();
 builder.Services.AddScoped<IFeatureRepository,FeatureRepository>();
 builder.Services.AddScoped<ICarRepository,CarRepository>();
 
-
+// DI of UI Service
+builder.Services.AddScoped<IFormOptionsService, FormOptionsService>();
 
 
 var app = builder.Build();
@@ -71,3 +74,5 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+

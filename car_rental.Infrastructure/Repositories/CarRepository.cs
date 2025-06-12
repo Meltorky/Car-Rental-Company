@@ -7,6 +7,7 @@ using car_rental.Application.Interfaces.IRepositories;
 using car_rental.Domain.Entities;
 using car_rental.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace car_rental.Infrastructure.Repositories
 {
@@ -18,12 +19,15 @@ namespace car_rental.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Car>> GetAllWithNoTracking()
+        // Use the 'new' keyword to explicitly hide the inherited member
+        public new async Task<Car?> GetById(int Id)
         {
             return await _context.Set<Car>()
-                .OrderByDescending(x => x.PricePerDay)
-                .AsNoTracking()
-                .ToListAsync();
+                //.AsNoTracking()               // when i do it, the brandId and FeatureIds not updated
+                .Include(b => b.Brand)
+                .Include(cf => cf.CarFeatures)
+                .ThenInclude(f => f.Feature)
+                .FirstOrDefaultAsync(e => e.Id == Id);
         }
     }
 }

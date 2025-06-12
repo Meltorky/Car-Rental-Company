@@ -16,8 +16,7 @@ namespace car_rental.Domain.Entities
         // properties
 
         public DateOnly BookingStartDate { get; set; }
-        public int BookingDays { get; set; }
-        public DateOnly BookingEndDate => BookingStartDate.AddDays(BookingDays);
+        public DateOnly BookingEndDate { get; set; }
         public double TotalCost { get; set; }
         public string Address { get; set; } = string.Empty;
 

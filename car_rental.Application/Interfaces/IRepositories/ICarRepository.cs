@@ -9,6 +9,6 @@ namespace car_rental.Application.Interfaces.IRepositories
 {
     public interface ICarRepository : IBaseRepository<Car>
     {
-        Task<List<Car>> GetAllWithNoTracking();
+        new Task<Car?> GetById(int Id);
     }
 }

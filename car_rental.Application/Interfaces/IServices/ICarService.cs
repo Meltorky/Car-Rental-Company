@@ -9,9 +9,8 @@ namespace car_rental.Application.Interfaces.IServices
 {
     public interface ICarService
     {
-        Task<CarDTO> GetById(int Id);
+        Task<CarFormDTO?> GetById(int Id);
         Task<IEnumerable<CarDTO>> GetAll();
-        Task<IEnumerable<CarDTO>> GetAllAsNoTracking();
         Task<bool> Add(CarFormDTO dTO);
         Task<bool?> Edit(CarFormDTO dTO);
         Task<bool> Remove(int id);

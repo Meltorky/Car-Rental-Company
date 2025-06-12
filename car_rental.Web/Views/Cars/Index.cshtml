@@ -1,69 +1,217 @@
-﻿@model CarFormViewModel
-
+﻿@model IEnumerable<CarDTO>
 @{
-    ViewData["Title"] = "Create New Car";
+    ViewData["Title"] = "All Cars";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh;">
+    <div class="container">
+        <!-- Elegant Header Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-light text-dark mb-3" style="letter-spacing: 2px;">
+                <i class="fas fa-car-side text-success me-3"></i>
+                @ViewData["Title"]
+            </h1>
+            <div class="mx-auto" style="width: 100px; height: 3px; background: linear-gradient(90deg, #198754, #20c997);"></div>
+            <p class="lead text-muted mt-3">Discover our premium collection of luxury vehicles</p>
+        </div>
 
-<form asp-action="Create" asp-controller="Car" method="post" enctype="multipart/form-data">
+        <!-- Cars Grid -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var car in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-lg position-relative overflow-hidden"
+                         style="transition: all 0.3s ease; border-radius: 15px;">
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.BrandId" class="control-label">Brand</label>
-        <select asp-for="CarFormDTO.FeatureIds" asp-items="Model.BrandList" class="form-control"></select>
-        <span asp-validation-for="CarFormDTO.BrandId" class="text-danger"></span>
+                        <!-- Luxury Accent Border -->
+                        <div class="position-absolute top-0 start-0 w-100"
+                             style="height: 4px; background: linear-gradient(90deg, #198754, #20c997, #198754);"></div>
+
+                        <!-- Car Image -->
+                        <div class="position-relative">
+                            <div class="card-img-top"
+                                 style="height: 250px;
+                                        background-size: cover;
+                                        background-position: center;
+                                        background-image: url(data:image/*;base64,@car.CarImage);
+                                        border-radius: 15px 15px 0 0;">
+                            </div>
+                            <!-- Availability Badge -->
+                            <div class="position-absolute top-0 end-0 m-3">
+                                @if (car.IsExist)
+                                {
+                                    <span class="badge bg-success px-3 py-2 rounded-pill shadow">
+                                        <i class="fas fa-check-circle me-1"></i>Available
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary px-3 py-2 rounded-pill shadow">
+                                        <i class="fas fa-times-circle me-1"></i>Not Available
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body p-4">
+                            <!-- Car Title -->
+                            <h5 class="card-title text-success mb-3 fw-bold" style="font-size: 1.25rem;">
+                                <spa class="">@car.Brand</spa> @car.Name
+                            </h5>
+
+                            <!-- Year -->
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-tag text-success me-2"></i>
+                                <span class="text-muted fw-bolder"><strong>Year:</strong> @car.Year</span>
+                            </div>
+
+                            <!-- Price - Highlighted -->
+                            <div class="bg-light rounded-3 p-3 mb-3 border-start border-success border-4">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-success me-2"></i>
+                                    <span class="fw-bold text-dark">$@car.PricePerDay</span>
+                                    <span class="text-muted ms-1">/ day</span>
+                                </div>
+                            </div>
+
+                            <!-- Car Specifications -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-cogs text-success me-2" style="width: 16px;"></i>
+                                        <small class="text-muted">
+                                            <strong>Transmission:</strong> @car.carTransmission.ToString()
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-gas-pump text-success me-2" style="width: 16px;"></i>
+                                        <small class="text-muted">
+                                            <strong>Fuel:</strong> @car.carFuel.ToString()
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-car text-success me-2" style="width: 16px;"></i>
+                                        <small class="text-muted">
+                                            <strong>Body Type:</strong> @car.carBodyType.ToString()
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Features -->
+                            @if (car.Features.Any())
+                            {
+                                <div class="mb-3">
+                                    <h6 class="text-success mb-2">
+                                        <i class="fas fa-star me-1"></i>Premium Features
+                                    </h6>
+                                    <div class="row g-1">
+                                        @foreach (var feature in car.Features.Take(4))
+                                        {
+                                            <div class="col-6">
+                                                <small class="text-muted d-flex align-items-center">
+                                                    <i class="fas fa-check text-success me-1" style="font-size: 0.7rem;"></i>
+                                                    @feature
+                                                </small>
+                                            </div>
+                                        }
+                                        @if (car.Features.Count() > 4)
+                                        {
+                                            <div class="col-12">
+                                                <small class="text-success">+@(car.Features.Count() - 4) more features</small>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Card Footer with Actions -->
+                        <div class="card-footer bg-white border-0 p-4 pt-0">
+                            <div class="d-grid gap-2 d-flex justify-content-md-between">
+                                <a asp-action="Edit" asp-route-id="@car.Id"
+                                   class="btn btn-outline-success btn-sm px-4 rounded-pill flex-fill me-md-2"
+                                   style="transition: all 0.3s ease;">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@car.Id" method="post" class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this car?');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm px-5 rounded-pill flex-fill me-md-2">
+                                        <i class="fas fa-trash me-1"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Empty State -->
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-car-side text-muted mb-3" style="font-size: 4rem;"></i>
+                <h4 class="text-muted mb-3">No Cars Available</h4>
+                <p class="text-muted">Start building your luxury car collection by adding your first vehicle.</p>
+                <a href="#" class="btn btn-success btn-lg rounded-pill px-5">
+                    <i class="fas fa-plus me-2"></i>Add New Car
+                </a>
+            </div>
+        }
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.Name" class="control-label"></label>
-        <input asp-for="CarFormDTO.Name" class="form-control" />
-        <span asp-validation-for="CarFormDTO.Name" class="text-danger"></span>
-    </div>
+<!-- Custom CSS for enhanced luxury feel -->
+<style>
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.CarImage" class="control-label">Car Image</label>
-        <input asp-for="CarFormDTO.CarImage" type="file" class="form-control-file" />
-    </div>
+    .btn-outline-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.PricePerDay" class="control-label"></label>
-        <input asp-for="CarFormDTO.PricePerDay" class="form-control" />
-        <span asp-validation-for="CarFormDTO.PricePerDay" class="text-danger"></span>
-    </div>
+    .btn-outline-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.Year" class="control-label"></label>
-        <input asp-for="CarFormDTO.Year" class="form-control" />
-        <span asp-validation-for="CarFormDTO.Year" class="text-danger"></span>
-    </div>
+    .card-img-top {
+        transition: transform 0.3s ease;
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.CarTransmission" class="control-label"></label>
-        <select asp-for="CarFormDTO.CarTransmission" asp-items="Model.CarTransmissionList" class="form-control"></select>
-        <span asp-validation-for="CarFormDTO.CarTransmission" class="text-danger"></span>
-    </div>
+    .card:hover .card-img-top {
+        transform: scale(1.05);
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.CarFuel" class="control-label"></label>
-        <select asp-for="CarFormDTO.CarFuel" asp-items="Model.CarFuelList" class="form-control"></select>
-        <span asp-validation-for="CarFormDTO.CarFuel" class="text-danger"></span>
-    </div>
+    .badge {
+        backdrop-filter: blur(10px);
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.CarBodyType" class="control-label"></label>
-        <select asp-for="CarFormDTO.CarBodyType" asp-items="Model.BodyTypeList" class="form-control"></select>
-        <span asp-validation-for="CarFormDTO.CarBodyType" class="text-danger"></span>
-    </div>
+    /* Luxury scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
 
-    <div class="form-group">
-        <label asp-for="CarFormDTO.FeatureIds" class="control-label">Car Features</label>
-        <select asp-for="CarFormDTO.FeatureIds" asp-items="Model.FeatureList" multiple class="form-control"></select>
-        <span asp-validation-for="CarFormDTO.FeatureIds" class="text-danger"></span>
-    </div>
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
 
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #198754, #20c997);
+        border-radius: 10px;
+    }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #157347, #1aa179);
+        }
+</style>

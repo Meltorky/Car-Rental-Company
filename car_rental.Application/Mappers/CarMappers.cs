@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using car_rental.Application.DTOs.Car;
 using car_rental.Domain.Entities;
+using car_rental.Domain.Enums;
 
 namespace car_rental.Application.Mappers
 {
@@ -33,6 +34,23 @@ namespace car_rental.Application.Mappers
             return carDTOs;
         }
 
+        public static CarFormDTO ToCarFormDTO(this Car car) 
+        {
+            return new CarFormDTO
+            {
+                Id = car.Id,
+                Name = car.Name,
+                Year = car.Year,
+                PricePerDay = car.PricePerDay,
+                BrandId = car.Brand.Id,
+                CarTransmission = car.carTransmission,
+                CarFuel = car.carFuel,
+                CarBodyType = car.carBodyType,
+                FeatureIds = car.CarFeatures.Select(cf => cf.Feature.Id).ToList(),
+                ExistingImagePath = Convert.ToBase64String(car.CarImage)
+            };
+        }
+
 
         public static Car ToCarEntity(this CarFormDTO dto, byte[] carImage)
         {
@@ -49,6 +67,21 @@ namespace car_rental.Application.Mappers
                 CarImage = carImage,
                 CarFeatures = dto.FeatureIds.Select(e => new CarFeature { CarId = dto.Id, FeatureId = e }).ToList(),
             };
+        }
+
+        public static Car ToCarEntityForEdit(this CarFormDTO dto, Car car)
+        {
+            car.Id = dto.Id;
+            car.Name = dto.Name;
+            car.BrandId = dto.BrandId;
+            car.carBodyType = dto.CarBodyType;
+            car.carFuel = dto.CarFuel;
+            car.carTransmission = dto.CarTransmission;
+            car.PricePerDay = dto.PricePerDay;
+            car.Year = dto.Year;
+            //car.CarImage = carImage ?? car.CarImage;
+            car.CarFeatures = dto.FeatureIds.Select(e => new CarFeature { CarId = dto.Id, FeatureId = e }).ToList();
+            return car;
         }
     }
 }

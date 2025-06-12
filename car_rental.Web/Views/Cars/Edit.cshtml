@@ -1,0 +1,444 @@
+﻿@* @model CarFormViewModel *@
+
+@* @{ *@
+@* 	ViewData["Title"] = "Edit Car"; *@
+@* } *@
+
+@* <h2>@ViewData["Title"]</h2> *@
+
+@* <form asp-action="Edit" asp-controller="Cars" method="post" enctype="multipart/form-data"> *@
+@* 	<input asp-for="CarFormDTO.Id" hidden/> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.BrandId" class="control-label">Brand</label> *@
+@* 		<select asp-for="CarFormDTO.BrandId" asp-items="Model.BrandList" class="form-control"></select> *@
+@* 		<span asp-validation-for="CarFormDTO.BrandId" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.Name" class="control-label"></label> *@
+@* 		<input asp-for="CarFormDTO.Name" class="form-control" /> *@
+@* 		<span asp-validation-for="CarFormDTO.Name" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.CarImage" class="control-label">Car Image</label> *@
+@* 		<input asp-for="CarFormDTO.CarImage" type="file" class="form-control-file" id="carImageInput" /> *@
+@* 		<span asp-validation-for="CarFormDTO.CarImage" class="text-danger"></span> *@
+@* 		<img id="carImagePreview" *@
+@* 			 src="data:image/*;base64,@Model.CarFormDTO.ExistingImagePath" *@
+@* 			 class="img-thumbnail @(string.IsNullOrEmpty(Model.CarFormDTO.ExistingImagePath) ? "d-none" : "")" *@
+@* 			 style="max-height: 200px;" /> *@
+
+@* 	</div> *@
+
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.PricePerDay" class="control-label"></label> *@
+@* 		<input asp-for="CarFormDTO.PricePerDay" class="form-control" /> *@
+@* 		<span asp-validation-for="CarFormDTO.PricePerDay" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.Year" class="control-label"></label> *@
+@* 		<input asp-for="CarFormDTO.Year" class="form-control" /> *@
+@* 		<span asp-validation-for="CarFormDTO.Year" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.CarTransmission" class="control-label"></label> *@
+@* 		<select asp-for="CarFormDTO.CarTransmission" asp-items="Model.CarTransmissionList" class="form-control"></select> *@
+@* 		<span asp-validation-for="CarFormDTO.CarTransmission" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.CarFuel" class="control-label"></label> *@
+@* 		<select asp-for="CarFormDTO.CarFuel" asp-items="Model.CarFuelList" class="form-control"></select> *@
+@* 		<span asp-validation-for="CarFormDTO.CarFuel" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.CarBodyType" class="control-label"></label> *@
+@* 		<select asp-for="CarFormDTO.CarBodyType" asp-items="Model.BodyTypeList" class="form-control"></select> *@
+@* 		<span asp-validation-for="CarFormDTO.CarBodyType" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<div class="form-group"> *@
+@* 		<label asp-for="CarFormDTO.FeatureIds" class="control-label">Car Features</label> *@
+@* 		<select asp-for="CarFormDTO.FeatureIds" asp-items="Model.FeatureList" multiple class="form-control"></select> *@
+@* 		<span asp-validation-for="CarFormDTO.FeatureIds" class="text-danger"></span> *@
+@* 	</div> *@
+
+@* 	<button type="submit" class="btn btn-primary">Save</button> *@
+@* </form> *@
+
+@* @section Scripts { *@
+@* 	<partial name="_ValidationScriptsPartial" /> *@
+@* 	<script> *@
+@* 		$(document).ready(function () { *@
+@* 			const $input = $('#carImageInput'); *@
+@* 			const $preview = $('#carImagePreview'); *@
+
+@* 			// Show preview on file select *@
+@* 			$input.on('change', function () { *@
+@* 				const file = this.files[0]; *@
+@* 				if (file) { *@
+@* 					const reader = new FileReader(); *@
+@* 					reader.onload = function (e) { *@
+@* 						$preview.attr('src', e.target.result).removeClass('d-none'); *@
+@* 					}; *@
+@* 					reader.readAsDataURL(file); *@
+@* 				} *@
+@* 		}); *@
+
+@* 		}); *@
+@* 	</script> *@
+@* } *@
+
+@model CarFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Car";
+}
+
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-xl-8 col-lg-10 col-12 text-center">
+            <div class="bg-success bg-gradient rounded-3 py-4 mb-4 shadow-sm">
+                <h2 class="text-white fw-bold mb-2">
+                    <i class="bi bi-pencil-square me-2"></i>@ViewData["Title"]
+                </h2>
+                <p class="text-white-50 mb-0">Update the car information below</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10 col-12">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-success bg-gradient text-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-gear me-2"></i>Edit Car Information
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Edit" asp-controller="Cars" method="post" enctype="multipart/form-data">
+                        <input asp-for="CarFormDTO.Id" hidden />
+
+                        <div class="row g-4">
+
+                            <!-- Brand Selection -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select asp-for="CarFormDTO.BrandId" asp-items="Model.BrandList" class="form-select border-2" id="brandSelect">
+                                        <option value="">Choose Brand...</option>
+                                    </select>
+                                    <label for="brandSelect" class="text-success fw-semibold">
+                                        <i class="bi bi-bookmark me-1"></i>Brand
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.BrandId" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <!-- Car Name -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="CarFormDTO.Name" class="form-control border-2" id="carName" placeholder="Car Name" />
+                                    <label for="carName" class="text-success fw-semibold">
+                                        <i class="bi bi-car-front me-1"></i>Car Name
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.Name" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <!-- Image Upload Section -->
+                            <div class="col-12">
+                                <div class="card border-success border-2 border-opacity-25 bg-light bg-opacity-50">
+                                    <div class="card-header bg-success bg-opacity-10 border-0">
+                                        <h6 class="text-success fw-semibold mb-0">
+                                            <i class="bi bi-image me-2"></i>Car Image
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="carImageInput" class="form-label text-muted">
+                                                        <i class="bi bi-upload me-1"></i>Choose new image (optional)
+                                                    </label>
+                                                    <input asp-for="CarFormDTO.CarImage" type="file" class="form-control border-2" id="carImageInput" accept="image/*" />
+                                                    <small class="text-muted">Leave empty to keep current image</small>
+                                                    <span asp-validation-for="CarFormDTO.CarImage" class="text-danger small d-block"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="preview-container">
+                                                    <div class="current-image-label mb-2">
+                                                        <small class="text-success fw-semibold">
+                                                            <i class="bi bi-eye me-1"></i>Current Image:
+                                                        </small>
+                                                    </div>
+                                                    <img id="carImagePreview"
+                                                         src="data:image/*;base64,@Model.CarFormDTO.ExistingImagePath"
+                                                         class="img-fluid rounded-3 shadow-sm border @(string.IsNullOrEmpty(Model.CarFormDTO.ExistingImagePath) ? "d-none" : "")"
+                                                         style="max-height: 200px; width: 100%; object-fit: cover;"
+                                                         alt="Car Image" />
+
+                                                    @if (string.IsNullOrEmpty(Model.CarFormDTO.ExistingImagePath))
+                                                    {
+                                                        <div class="no-image-placeholder text-center py-5 border-2 border-dashed border-success border-opacity-25 rounded-3">
+                                                            <i class="bi bi-image text-success opacity-50" style="font-size: 3rem;"></i>
+                                                            <p class="text-muted mt-2 mb-0">No image available</p>
+                                                            <small class="text-muted">Upload an image to see preview</small>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Price and Year -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="CarFormDTO.PricePerDay" class="form-control border-2" id="pricePerDay" placeholder="Price Per Day" type="number" />
+                                    <label for="pricePerDay" class="text-success fw-semibold">
+                                        <i class="bi bi-currency-dollar me-1"></i>Price Per Day
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.PricePerDay" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="CarFormDTO.Year" class="form-control border-2" id="carYear" placeholder="Year" type="number" />
+                                    <label for="carYear" class="text-success fw-semibold">
+                                        <i class="bi bi-calendar me-1"></i>Year
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.Year" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <!-- Transmission and Fuel -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select asp-for="CarFormDTO.CarTransmission" asp-items="Model.CarTransmissionList" class="form-select border-2" id="transmission">
+                                        <option value="">Choose Transmission...</option>
+                                    </select>
+                                    <label for="transmission" class="text-success fw-semibold">
+                                        <i class="bi bi-gear me-1"></i>Transmission
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.CarTransmission" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select asp-for="CarFormDTO.CarFuel" asp-items="Model.CarFuelList" class="form-select border-2" id="fuelType">
+                                        <option value="">Choose Fuel Type...</option>
+                                    </select>
+                                    <label for="fuelType" class="text-success fw-semibold">
+                                        <i class="bi bi-fuel-pump me-1"></i>Fuel Type
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.CarFuel" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <!-- Body Type -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select asp-for="CarFormDTO.CarBodyType" asp-items="Model.BodyTypeList" class="form-select border-2" id="bodyType">
+                                        <option value="">Choose Body Type...</option>
+                                    </select>
+                                    <label for="bodyType" class="text-success fw-semibold">
+                                        <i class="bi bi-truck me-1"></i>Body Type
+                                    </label>
+                                    <span asp-validation-for="CarFormDTO.CarBodyType" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <!-- Features -->
+                            <div class="col-12">
+                                <div class="card border-success border-2 border-opacity-25 bg-light bg-opacity-50">
+                                    <div class="card-header bg-success bg-opacity-10 border-0">
+                                        <h6 class="text-success fw-semibold mb-0">
+                                            <i class="bi bi-star me-2"></i>Car Features
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <select asp-for="CarFormDTO.FeatureIds" asp-items="Model.FeatureList" multiple class="form-select border-2" size="8">
+                                        </select>
+                                        <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple features</small>
+                                        <span asp-validation-for="CarFormDTO.FeatureIds" class="text-danger small d-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="col-12 text-center pt-3">
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow-sm">
+                                        <i class="bi bi-check-circle me-2"></i>Save Changes
+                                    </button>
+                                    <a href="#" class="btn btn-outline-secondary btn-lg px-4 rounded-pill ms-md-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Cancel
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger btn-lg px-4 rounded-pill ms-md-2" id="resetBtn">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+    .form-floating > .form-control:focus,
+    .form-floating > .form-select:focus {
+        border-color: var(--bs-success);
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+
+    .form-floating > label {
+        padding-left: 1rem;
+    }
+
+    .preview-container {
+        position: relative;
+        min-height: 200px;
+    }
+
+    .current-image-label {
+        position: absolute;
+        top: -10px;
+        left: 0;
+        z-index: 10;
+        background: white;
+        padding: 0 8px;
+        border-radius: 4px;
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+        transform: translateY(-2px);
+        transition: all 0.2s ease;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .border-2 {
+        border-width: 2px !important;
+    }
+
+    .no-image-placeholder {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @@media (max-width: 768px) {
+        .container-fluid
+
+    {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .d-grid .btn {
+        margin-bottom: 10px;
+    }
+
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            const $input = $('#carImageInput');
+            const $preview = $('#carImagePreview');
+            const $form = $('form');
+            const originalFormData = $form.serialize();
+
+            // Show preview on file select
+            $input.on('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $preview.attr('src', e.target.result).removeClass('d-none');
+                        $('.no-image-placeholder').addClass('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Reset form functionality
+            $('#resetBtn').on('click', function() {
+                if (confirm('Are you sure you want to reset all changes? This will restore the original values.')) {
+                    // Reset the form to original state
+                    $form[0].reset();
+
+                    // Reset image preview to original
+                    if ('@Model.CarFormDTO.ExistingImagePath' !== '') {
+                        $preview.attr('src', 'data:image/*;base64,@Model.CarFormDTO.ExistingImagePath').removeClass('d-none');
+                        $('.no-image-placeholder').addClass('d-none');
+                    } else {
+                        $preview.addClass('d-none');
+                        $('.no-image-placeholder').removeClass('d-none');
+                    }
+
+                    // Clear file input
+                    $input.val('');
+                }
+            });
+
+            // Add smooth animations to form elements
+            $('.form-floating input, .form-floating select').on('focus', function() {
+                $(this).parent().addClass('focused');
+            }).on('blur', function() {
+                $(this).parent().removeClass('focused');
+            });
+
+            // Highlight changed fields
+            $('input, select').on('change', function() {
+                if ($(this).val() !== $(this).data('original-value')) {
+                    $(this).addClass('border-warning border-3');
+                } else {
+                    $(this).removeClass('border-warning border-3');
+                }
+            });
+
+            // Store original values for comparison
+            $('input, select').each(function() {
+                $(this).data('original-value', $(this).val());
+            });
+        });
+    </script>
+}
