@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using car_rental.Application.DTOs.Car;
+using car_rental.Application.DTOs.Deal;
 using car_rental.Application.Interfaces.IRepositories;
 using car_rental.Application.Interfaces.IServices;
 using car_rental.Application.Mappers;
@@ -69,6 +70,13 @@ namespace car_rental.Application.Services
             var car = await _carRepository.GetById(id);
             if (car is null) return false;
             return await _carRepository.Delete(car);
+        }
+
+
+        public async Task<IEnumerable<CarDTO>> FilterCars(FilterDealsFormDTO dto)
+        {
+            var result = await _carRepository.GetFilteredCarwithAllCriteria(dto);
+            return result.ToList().ToCarDTOList();
         }
 
 

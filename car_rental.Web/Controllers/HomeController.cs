@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using car_rental.Application.DTOs.Deal;
 using car_rental.Web.Models;
+using car_rental.Web.ViewModels.Deals;
 using Microsoft.AspNetCore.Mvc;
 
 namespace car_rental.Web.Controllers
@@ -7,11 +9,27 @@ namespace car_rental.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> FindDeals(FilterDealsFormDTO dto) 
+        {
+            //return RedirectToRoute("Filter_Deals",dto);
+            return RedirectToAction(nameof(Index),nameof(DealsController),dto);
+        }
+
+
+
+
+
+
+
+
 
         public IActionResult Index()
         {
@@ -23,10 +41,5 @@ namespace car_rental.Web.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

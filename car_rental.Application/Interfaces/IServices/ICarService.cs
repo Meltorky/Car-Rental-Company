@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using car_rental.Application.DTOs.Car;
+using car_rental.Application.DTOs.Deal;
 
 namespace car_rental.Application.Interfaces.IServices
 {
@@ -14,6 +15,7 @@ namespace car_rental.Application.Interfaces.IServices
         Task<bool> Add(CarFormDTO dTO);
         Task<bool?> Edit(CarFormDTO dTO);
         Task<bool> Remove(int id);
+        Task<IEnumerable<CarDTO>> FilterCars(FilterDealsFormDTO dto);
 
     }
 }

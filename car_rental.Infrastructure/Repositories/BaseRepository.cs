@@ -23,7 +23,8 @@ namespace car_rental.Infrastructure.Repositories
         public async Task<List<T>> GetAll
             (params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includeExpressions)
         {
-            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+            IQueryable<T> query = _context.Set<T>()
+                .AsNoTracking();
 
             if (includeExpressions.Length > 0)
             {
