@@ -1,4 +1,5 @@
 
+using car_rental.Web.Extentions;
 using car_rental.Web.UIService;
 
 var builder = WebApplication.CreateBuilder(args);

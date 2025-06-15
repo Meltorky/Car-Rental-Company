@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using car_rental.Domain.Identity.Enums
 @using car_rental.Domain.Identity.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -8,7 +9,12 @@
 {
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a>
-    </li>
+            <h3>@User.IsInRole(ApplicationRoles.Admin.ToString())</h3>
+            @{
+                var user = await UserManager.GetUserAsync(User);
+            }
+            <h3>User ID: @user?.Id</h3>
+        </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>

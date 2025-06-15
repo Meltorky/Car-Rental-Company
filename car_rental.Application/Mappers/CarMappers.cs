@@ -34,6 +34,27 @@ namespace car_rental.Application.Mappers
             return carDTOs;
         }
 
+
+        public static CarDTO ToCarDTO(this Car car)
+        {
+            return new CarDTO
+            {
+                Id = car.Id,
+                Name = car.Name,
+                Year = car.Year,
+                PricePerDay = car.PricePerDay,
+                IsExist = car.IsExist,
+                Brand = car.Brand.Name,
+                carTransmission = car.carTransmission,
+                carFuel = car.carFuel,
+                carBodyType = car.carBodyType,
+                Features = car.CarFeatures.Select(cf => cf.Feature.Name).ToList(),
+                CarImage = Convert.ToBase64String(car.CarImage)
+            };
+        }
+
+
+
         public static CarFormDTO ToCarFormDTO(this Car car) 
         {
             return new CarFormDTO

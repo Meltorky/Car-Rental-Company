@@ -23,5 +23,7 @@ namespace car_rental.Web.ViewModels.Deals
         public IEnumerable<CarFuel> CarFuelList { get;} = Enum.GetValues(typeof(CarFuel)).Cast<CarFuel>();
         public IEnumerable<CarTransmission> CarTransmissionList { get; } = Enum.GetValues(typeof(CarTransmission)).Cast<CarTransmission>();
 
+        // the bookig view model to can call the booking action
+        //public BookingViewModel BookingViewModel { get; set; } = new();
     }
 }

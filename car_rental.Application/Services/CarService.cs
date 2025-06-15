@@ -39,6 +39,13 @@ namespace car_rental.Application.Services
             return car.ToCarFormDTO();
         }
 
+        public async Task<CarDTO?> GetByIdCarDTO(int Id)
+        {
+            var car = await _carRepository.GetById(Id);
+            if (car is null) return null;
+            return car.ToCarDTO();
+        }
+
 
         public async Task<bool> Add(CarFormDTO dTO)
         {

@@ -28,7 +28,7 @@ namespace car_rental.Infrastructure.Seeds
 
                 var result = await userManager.CreateAsync(admin, password);
 
-                if (result.Succeeded && roleManager.RoleExistsAsync(ApplicationRoles.Admin.ToString()) is not null)
+                if (result.Succeeded && await roleManager.RoleExistsAsync(ApplicationRoles.Admin.ToString()))
                     await userManager.AddToRoleAsync(admin, ApplicationRoles.Admin.ToString());
                 
             }

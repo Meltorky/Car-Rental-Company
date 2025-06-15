@@ -12,7 +12,7 @@ namespace car_rental.Domain.Entities
     {
         [Key]
         public int BookingId { get; set; }
-
+        
         // properties
 
         public DateOnly BookingStartDate { get; set; }

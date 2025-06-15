@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
+using car_rental.Application.DTOs.Car;
 using car_rental.Application.DTOs.Deal;
 using car_rental.Web.UIService;
 using car_rental.Web.ViewModels.Deals;
@@ -42,5 +44,43 @@ namespace car_rental.Web.Controllers
 
             return View(vm);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Booking(int id, string address, DateOnly startdate, DateOnly enddate)
+        {
+            var carDTO = await _carService.GetByIdCarDTO(id);
+            return View(new BookingViewModel 
+            {
+                CarDTO = carDTO ?? new(),
+                BookingFormDTO = new() 
+                {
+                    Address = address,
+                    BookingStartDate = startdate,
+                    BookingEndDate = enddate,
+                    CarId = id,
+                    PricePerDay = carDTO!.PricePerDay,                 
+                }
+            });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Booking(BookingViewModel vm)
+        {
+            var startDateStr = Request.Form["BookingFormDTO.BookingStartDate"];
+            var endDateStr = Request.Form["BookingFormDTO.BookingEndDate"];
+            DateOnly.TryParse(startDateStr, out var startDate);
+            DateOnly.TryParse(endDateStr, out var endDate);
+
+            if (!ModelState.IsValid || startDate > endDate) 
+            {
+                vm.CarDTO = await _carService.GetByIdCarDTO(vm.BookingFormDTO.CarId)?? new();
+                return View(vm);
+            }
+
+            return View(vm);
+        }
+
     }
 }
