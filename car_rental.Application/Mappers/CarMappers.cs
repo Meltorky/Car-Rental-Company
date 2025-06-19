@@ -49,7 +49,8 @@ namespace car_rental.Application.Mappers
                 carFuel = car.carFuel,
                 carBodyType = car.carBodyType,
                 Features = car.CarFeatures.Select(cf => cf.Feature.Name).ToList(),
-                CarImage = Convert.ToBase64String(car.CarImage)
+                CarImage = Convert.ToBase64String(car.CarImage),
+                Bookings = car.Bookings.ToList()
             };
         }
 

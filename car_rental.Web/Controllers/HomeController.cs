@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using car_rental.Application.DTOs.Deal;
+using car_rental.Application.DTOs.Filter;
 using car_rental.Web.Models;
 using car_rental.Web.ViewModels.Deals;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +18,13 @@ namespace car_rental.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> FindDeals(FilterDealsFormDTO dto) 
+        public IActionResult FindDeals(PrimaryFilterDTO dto) 
         {
-            //return RedirectToRoute("Filter_Deals",dto);
-            return RedirectToAction(nameof(Index),nameof(DealsController),dto);
+            if (!ModelState.IsValid || dto.StartDate > dto.EndDate)
+                return View();
+
+            return RedirectToAction("Filter","Deals",dto);
         }
-
-
-
-
-
-
-
 
 
         public IActionResult Index()

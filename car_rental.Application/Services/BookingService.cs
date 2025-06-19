@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using car_rental.Application.DTOs.Booking;
+using car_rental.Application.DTOs.Bookings;
 using car_rental.Application.Interfaces.IRepositories;
 using car_rental.Application.Interfaces.IServices;
 using car_rental.Application.Mappers;

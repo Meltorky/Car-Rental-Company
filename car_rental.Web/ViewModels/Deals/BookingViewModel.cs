@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using car_rental.Application.DTOs.Booking;
+using car_rental.Application.DTOs.Bookings;
 using car_rental.Application.DTOs.Car;
 using car_rental.Domain.Entities;
 

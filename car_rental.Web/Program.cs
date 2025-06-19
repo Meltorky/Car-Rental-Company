@@ -25,6 +25,7 @@ builder.Services.AddRazorPages(); // Add this line
 // DI of Services Interfaces
 builder.Services.AddScoped<IFeatureService,FeatureService>();
 builder.Services.AddScoped<ICarService,CarService>();
+builder.Services.AddScoped<IBookingService,BookingService>();
 builder.Services.AddScoped<IBrandService>(provider =>
 {
     // inject the IWebHostEnvironment in the services
@@ -38,6 +39,7 @@ builder.Services.AddScoped<IBrandService>(provider =>
 builder.Services.AddScoped<IBrandRepository,BrandRepository>();
 builder.Services.AddScoped<IFeatureRepository,FeatureRepository>();
 builder.Services.AddScoped<ICarRepository,CarRepository>();
+builder.Services.AddScoped<IBookingRepository,BookingRepository>();
 
 // DI of UI Service
 builder.Services.AddScoped<IFormOptionsService, FormOptionsService>();
@@ -70,7 +72,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Deals}/{action=Filter}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 

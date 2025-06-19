@@ -1,184 +1,201 @@
-﻿@using car_rental.Web.ViewModels.Deals
+﻿@using car_rental.Application.DTOs.Filter
+@using car_rental.Web.ViewModels.Deals
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@model BookingViewModel
+@model DealsViewModel
 
 @{
 	ViewData["Title"] = "Deal Booking";
-	var user = await UserManager.GetUserAsync(User);
+	var user = await UserManager.GetUserAsync(User) ?? new();
 }
 
-<form asp-controller="Deals" asp-action="Booking">
-	<div class="col-md-4">
-		<label asp-for="BookingFormDTO.Address" class="form-label">Pick-Up Address</label>
-		<input asp-for="BookingFormDTO.Address" type="text" class="form-control" />
-	</div>
+<form asp-controller="Deals" asp-action="ConfirmBooking" method="post">
+	@Html.AntiForgeryToken()
+	<div class="row g-4">
+		<div class="col-lg-8">
 
-	<div class="col-md-4">
-		<label asp-for="BookingFormDTO.BookingStartDate" class="form-label">Pick-Up Date</label>
-		<input asp-for="BookingFormDTO.BookingStartDate" type="date" class="form-control" />
-	</div>
+			<input type="hidden" name="BookingViewModel.BookingFormDTO.UserId" value="@user.Id" />
+			<input type="text" name="BookingViewModel.BookingFormDTO.CarId" value="@Model.BookingViewModel.BookingFormDTO.CarId" />
+			<input type="text" name="BookingViewModel.BookingFormDTO.PricePerDay" value="@Model.BookingViewModel.CarDTO.PricePerDay" />
 
-	<div class="col-md-4">
-		<label asp-for="BookingFormDTO.BookingEndDate" class="form-label">Drop-Off Date</label>
-		<input asp-for="BookingFormDTO.BookingEndDate" type="date" class="form-control" />
-	</div>
-
-	<div class="col-md-4">
-		<input name="BookingFormDTO.UserId" value="@user?.Id" type="text" class="form-control" />
-	</div>
-
-	<div class="col-md-4">
-		<input name="BookingFormDTO.CarId" value="@Model.BookingFormDTO.CarId" type="text" class="form-control" />
-	</div>
-
-	<div class="col-md-4">
-		<input name="BookingFormDTO.PricePerDay" value="@Model.CarDTO.PricePerDay" type="text" class="form-control" />
-	</div>
-
-
-	<div class="col">
-		<div class="card h-100 border-0 shadow-lg position-relative overflow-hidden"
-			 style="transition: all 0.3s ease; border-radius: 15px;">
-
-			<!-- Luxury Accent Border -->
-			<div class="position-absolute top-0 start-0 w-100"
-				 style="height: 4px; background: linear-gradient(90deg, #198754, #20c997, #198754);"></div>
-
-			<!-- Car Image -->
-			<div class="position-relative">
-				<div class="card-img-top"
-					 style="height: 250px;
-                                        background-size: cover;
-                                        background-position: center;
-                                        background-image: url(data:image/*;base64,@Model.CarDTO.CarImage);
-                                        border-radius: 15px 15px 0 0;">
+			<!-- Booking Details -->
+			<div class="card border border-1 border-success" style="border-radius: 15px;">
+				<div class="card-header bg-success text-white p-4" style="border-radius: 15px 15px 0 0;">
+					<h4 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Booking Details</h4>
 				</div>
-				<!-- Availability Badge -->
-				<div class="position-absolute top-0 end-0 m-3">
-					@if (Model.CarDTO.IsExist)
-					{
+				<div class="card-body p-4">
+
+					<div class="mb-4">
+						<label asp-for="BookingViewModel.BookingFormDTO.Address" class="form-label fw-bold text-success">
+							<i class="fas fa-map-marker-alt me-2"></i> Pick-Up Location
+						</label>
+						<input asp-for="BookingViewModel.BookingFormDTO.Address" required type="text" class="form-control form-control-lg border-success"
+							   placeholder="Enter your pick-up address" style="border-radius: 10px;" />
+					</div>
+
+					<div class="row">
+						<div class="col-6 mb-4">
+							<label asp-for="BookingViewModel.BookingFormDTO.BookingStartDate" class="form-label fw-bold text-success">
+								<i class="fas fa-calendar-check me-2"></i> Pick-Up Date
+							</label>
+							<input readonly asp-for="BookingViewModel.BookingFormDTO.BookingStartDate"
+								   class="form-control form-control-lg border-success"
+								   style="border-radius: 10px;" />
+						</div>
+
+						<div class="col-6 mb-4">
+							<label asp-for="BookingViewModel.BookingFormDTO.BookingEndDate" class="form-label fw-bold text-success">
+								<i class="fas fa-calendar-check me-2"></i> Drop-Off Date
+							</label>
+							<input readonly asp-for="BookingViewModel.BookingFormDTO.BookingEndDate"
+								   class="form-control form-control-lg border-success"
+								   style="border-radius: 10px;" />
+						</div>
+					</div>
+
+					<div class="alert alert-success" id="priceInfo" border-radius: 10px;">
+						<h6 class="text-success"><i class="fas fa-calculator me-2"></i>Price Breakdown</h6>
+						<p class="mb-0">
+							@(Math.Abs(Model.BookingViewModel.BookingFormDTO.BookingEndDate.DayNumber - Model.BookingViewModel.BookingFormDTO.BookingStartDate.DayNumber) + 1) days × $@Model.BookingViewModel.CarDTO.PricePerDay = $<span>@Model.BookingViewModel.BookingFormDTO.TotalCost</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Payment Methods -->
+
+			<div class="card border border-1 border-success mt-4" style="border-radius: 15px;">
+				<div class="card-header bg-success text-white p-4" style="border-radius: 15px 15px 0 0;">
+					<h4 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Payment Methods</h4>
+				</div>
+				<div class="form-check py-3">
+
+					<div class="form-check py-3">
+
+						<div class="form-check py-3 border-bottom">
+							<input class="form-check-input text-success" type="radio" name="paymentMethod" id="applePayRadio" value="ApplePay" checked>
+							<label class="form-check-label d-flex align-items-center ms-2" for="applePayRadio">
+								<i class="fa-brands fa-cc-apple-pay"></i>
+								<span class="text-dark ms-3">Apple Pay</span>
+							</label>
+						</div>
+
+						<div class="form-check py-3 border-bottom">
+							<input class="form-check-input" type="radio" name="paymentMethod" id="creditCardRadio" value="CreditCard">
+							<label class="form-check-label ms-2" for="creditCardRadio">
+								<i class="fa-solid fa-credit-card"></i>
+								<span class="text-dark ms-2">Credit Card or Debit</span>
+							</label>
+						</div>
+
+						<div class="form-check py-3 border-bottom">
+							<input class="form-check-input" type="radio" name="paymentMethod" id="monthlyPaymentsRadio" value="MonthlyPayments">
+							<label class="form-check-label ms-2" for="monthlyPaymentsRadio">
+								<i class="fa-solid fa-money-bill"></i> <span class="text-dark ms-2">Monthly Payments</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Car Details -->
+		<div class="col-lg-4">
+			<div class="card h-100 border border-1 border-success" style="border-radius: 15px;">
+
+				<div class="position-relative">
+					<div class="card-img-top" style="height: 250px; background-size: cover; background-position: center; background-image: url(data:image/*;base64,@Model.BookingViewModel.CarDTO.CarImage); border-radius: 15px 15px 0 0;"></div>
+					<div class="position-absolute top-0 end-0 m-3">
 						<span class="badge bg-success px-3 py-2 rounded-pill shadow">
 							<i class="fas fa-check-circle me-1"></i>Available
 						</span>
-					}
-					else
+					</div>
+				</div>
+
+				<div class="card-body p-4">
+					<h5 class="card-title text-success mb-3 fw-bold">@Model.BookingViewModel.CarDTO.Brand @Model.BookingViewModel.CarDTO.Name</h5>
+
+					<div class="bg-light rounded-3 p-3 mb-3 border-start border-success border-4">
+						<div class="d-flex align-items-center">
+							<i class="fas fa-dollar-sign text-success me-2"></i>
+							<span class="fw-bold text-dark">$@Model.BookingViewModel.CarDTO.PricePerDay</span>
+							<span class="text-muted ms-1">/ day</span>
+						</div>
+					</div>
+
+					<!-- Car Specifications -->
+					<div class="row g-2 mb-3">
+						<div class="col-12">
+							<div class="d-flex align-items-center mb-2">
+								<i class="fas fa-cogs text-success me-2" style="width: 16px;"></i>
+								<small class="text-muted">
+									<strong>Transmission:</strong> @Model.BookingViewModel.CarDTO.carTransmission.ToString()
+								</small>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="d-flex align-items-center mb-2">
+								<i class="fas fa-gas-pump text-success me-2" style="width: 16px;"></i>
+								<small class="text-muted">
+									<strong>Fuel:</strong> @Model.BookingViewModel.CarDTO.carFuel.ToString()
+								</small>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="d-flex align-items-center mb-2">
+								<i class="fas fa-car text-success me-2" style="width: 16px;"></i>
+								<small class="text-muted">
+									<strong>Body Type:</strong> @Model.BookingViewModel.CarDTO.carBodyType.ToString()
+								</small>
+							</div>
+						</div>
+					</div>
+
+					<!-- Features -->
+					@if (Model.BookingViewModel.CarDTO.Features.Any())
 					{
-						<span class="badge bg-secondary px-3 py-2 rounded-pill shadow">
-							<i class="fas fa-times-circle me-1"></i>Not Available
-						</span>
+						<div>
+							<h6 class="text-success mb-2">
+								<i class="fas fa-star me-1"></i>Premium Features
+							</h6>
+							<div class="row">
+								@foreach (var feature in Model.BookingViewModel.CarDTO.Features.Take(6))
+								{
+									<div class="col-6">
+										<small class="text-muted d-flex align-items-center">
+											<i class="fas fa-check text-success me-1" style="font-size: 0.7rem;"></i>
+											@feature
+										</small>
+									</div>
+								}
+							</div>
+						</div>
 					}
-				</div>
-			</div>
-
-			<!-- Card Body -->
-			<div class="card-body p-4">
-				<!-- Car Title -->
-				<h5 class="card-title text-success mb-3 fw-bold" style="font-size: 1.25rem;">
-					<span class="">@Model.CarDTO.Brand</span> @Model.CarDTO.Name
-				</h5>
-
-				<!-- Year -->
-				<div class="d-flex align-items-center mb-3">
-					<i class="fas fa-tag text-success me-2"></i>
-					<span class="text-muted fw-bolder"><strong>Year:</strong> @Model.CarDTO.Year</span>
-				</div>
-
-				<!-- Price - Highlighted -->
-				<div class="bg-light rounded-3 p-3 mb-3 border-start border-success border-4">
-					<div class="d-flex align-items-center">
-						<i class="fas fa-dollar-sign text-success me-2"></i>
-						<span class="fw-bold text-dark">$@Model.CarDTO.PricePerDay</span>
-						<span class="text-muted ms-1">/ day</span>
-					</div>
-				</div>
-
-				<!-- Car Specifications -->
-				<div class="row g-2 mb-3">
-					<div class="col-12">
-						<div class="d-flex align-items-center mb-2">
-							<i class="fas fa-cogs text-success me-2" style="width: 16px;"></i>
-							<small class="text-muted">
-								<strong>Transmission:</strong> @Model.CarDTO.carTransmission.ToString()
-							</small>
+					<div class="mt-3 bg-white border-0 p-4 fw-bolder">
+						<div class="text-center mb-3 d-flex align-items-center justify-content-around">
+							<h4 class="text-success fw-bold">Total Cost:</h4>
+							<h2 class="text-success fw-bolder">$@Model.BookingViewModel.BookingFormDTO.TotalCost</h2>
 						</div>
+						<button type="submit" class="btn btn-success btn-lg w-100 fw-bold rounded-pill">
+							<i class="fas fa-check-circle me-2"></i>Confirm Booking
+						</button>
 					</div>
-					<div class="col-12">
-						<div class="d-flex align-items-center mb-2">
-							<i class="fas fa-gas-pump text-success me-2" style="width: 16px;"></i>
-							<small class="text-muted">
-								<strong>Fuel:</strong> @Model.CarDTO.carFuel.ToString()
-							</small>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="d-flex align-items-center mb-2">
-							<i class="fas fa-car text-success me-2" style="width: 16px;"></i>
-							<small class="text-muted">
-								<strong>Body Type:</strong> @Model.CarDTO.carBodyType.ToString()
-							</small>
-						</div>
-					</div>
-				</div>
-
-				<!-- Features -->
-				@if (Model.CarDTO.Features.Any())
-				{
-					<div class="mb-3">
-						<h6 class="text-success mb-2">
-							<i class="fas fa-star me-1"></i>Premium Features
-						</h6>
-						<div class="row g-1">
-							@foreach (var feature in Model.CarDTO.Features.Take(4))
-							{
-								<div class="col-6">
-									<small class="text-muted d-flex align-items-center">
-										<i class="fas fa-check text-success me-1" style="font-size: 0.7rem;"></i>
-										@feature
-									</small>
-								</div>
-							}
-							@if (Model.CarDTO.Features.Count() > 4)
-							{
-								<div class="col-12">
-									<small class="text-success">+@(Model.CarDTO.Features.Count() - 4) more features</small>
-								</div>
-							}
-						</div>
-					</div>
-				}
-			</div>
-
-			<!-- Card Footer with Actions -->
-			<div class="card-footer bg-white border-0 p-4 pt-0">
-				<div class="d-grid gap-2 d-flex justify-content-md-between">
-					<h1 class="px-4 fw-bolder text-success">
-						@Model.BookingFormDTO.TotalCost
-					</h1>
-					@* onsubmit="return confirm('Are you sure you want to delete this car?');"> *@
-					<button type="submit" class="btn btn-outline-danger btn-sm px-5 rounded-pill flex-fill me-md-2">
-						<i class="fas fa-trash me-1"></i> Confirm Booking
-					</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </form>
 
-@section Scripts {
-	<partial name="_ValidationScriptsPartial" />
-	<script>
-		$(document).ready(function () {
-			// Preview uploaded image
-			$('#brandLogo').on('change', function () {
-				const file = this.files[0];
-				if (file) {
-					const url = URL.createObjectURL(file);
-					$('#logoPreview').attr('src', url).removeClass('d-none');
-				}
-			});
+<form asp-controller="Deals" asp-action="Filter" method="post" class="mt-2">
+	<input value="@Model.BookingViewModel.BookingFormDTO.BookingStartDate" name="FilterDealsFormDTO.StartDate" type="hidden" />
+	<input value="@Model.BookingViewModel.BookingFormDTO.BookingEndDate" name="FilterDealsFormDTO.EndDate" type="hidden" />
+	<input value="@Model.BookingViewModel.BookingFormDTO.Address" name="FilterDealsFormDTO.Address" type="hidden" />
+	<button type="submit" class="btn btn-warning text-white fw-bold btn-lg w-100 rounded-pill mt-2"
+			style="border-radius:5px;">
+		<i class="fas fa-edit"></i>
+		Change The Date
+	</button>
+</form>
 
-	</script>
-}

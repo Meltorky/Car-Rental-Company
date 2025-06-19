@@ -26,6 +26,7 @@ namespace car_rental.Infrastructure.Repositories
             return await _context.Set<Car>()
                 //.AsNoTracking()               // when i do it, the brandId and FeatureIds not updated
                 .Include(b => b.Brand)
+                .Include(b => b.Bookings)
                 .Include(cf => cf.CarFeatures)
                 .ThenInclude(f => f.Feature)
                 .FirstOrDefaultAsync(e => e.Id == Id);
@@ -34,6 +35,8 @@ namespace car_rental.Infrastructure.Repositories
         public async Task<IEnumerable<Car>> GetFilteredCarwithAllCriteria(FilterDealsFormDTO dto)
         {
             var query = _context.Set<Car>()
+                .Where(car => car.Bookings.All(b =>
+                    b.BookingEndDate < dto.StartDate || b.BookingStartDate > dto.EndDate))
                 .AsNoTracking()
                 .Include(c => c.Brand)
                 .Include(c => c.CarFeatures)
@@ -79,7 +82,7 @@ namespace car_rental.Infrastructure.Repositories
                 queriesToUnion.Add(_context.Set<Car>().Where(c => c.BrandId == dto.BrandId));
             }
 
-            if (dto.CarBodyType.HasValue) 
+            if (dto.CarBodyType.HasValue)
             {
                 queriesToUnion.Add(_context.Set<Car>().Where(c => c.carBodyType == dto.CarBodyType.Value));
             }
@@ -94,7 +97,7 @@ namespace car_rental.Infrastructure.Repositories
                 queriesToUnion.Add(_context.Set<Car>().Where(c => c.carTransmission == dto.CarTransmission.Value));
             }
 
-            if (dto.FeatureIds != null && dto.FeatureIds.Any()) 
+            if (dto.FeatureIds != null && dto.FeatureIds.Any())
             {
                 queriesToUnion.Add(_context.Set<Car>()
                     .Where(c => dto.FeatureIds
@@ -104,13 +107,15 @@ namespace car_rental.Infrastructure.Repositories
             }
 
             IQueryable<Car> unionedQuery = _context.Set<Car>()
+                .Where(car => car.Bookings.All(b =>
+                    b.BookingEndDate < dto.StartDate || b.BookingStartDate > dto.EndDate))
                 .AsNoTracking()
                 .Include(c => c.Brand)
                 .Include(c => c.CarFeatures)
                 .ThenInclude(cf => cf.Feature)
                 .AsQueryable();
 
-            foreach (var query in queriesToUnion) 
+            foreach (var query in queriesToUnion)
             {
                 unionedQuery.Union(query);
             }

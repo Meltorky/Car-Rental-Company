@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using car_rental.Application.DTOs.Car;
 
-namespace car_rental.Application.DTOs.Booking
+namespace car_rental.Application.DTOs.Bookings
 {
     public class BookingFormDTO
     {

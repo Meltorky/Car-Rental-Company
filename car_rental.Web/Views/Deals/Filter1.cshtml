@@ -1,0 +1,981 @@
+﻿@using car_rental.Application.Settings
+@using car_rental.Web.ViewModels.Deals
+
+@model DealsViewModel
+
+<div class="luxury-container">
+    <!-- Hero Header -->
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="luxury-title">Premium Car Deals</h1>
+                    <p class="luxury-subtitle">Experience luxury with our exclusive vehicle collection</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                             alt="Luxury Car" class="img-fluid hero-car" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Banner Section -->
+    <div class="brand-banner-section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="brand-banner-title">Choose Your Preferred Brand</h2>
+                <p class="brand-banner-subtitle">Select from our premium collection of luxury vehicles</p>
+            </div>
+
+            <div class="brand-banner-container">
+                <button type="button" class="scroll-btn scroll-left" onclick="scrollBrands(-300)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div id="brand-scroll-container" class="brand-banner-slider">
+                    @foreach (var brand in Model.BrandList)
+                    {
+                        <div class="brand-banner-item">
+                            <input type="radio" class="btn-check" name="FilterDealsFormDTO.BrandId"
+                                   id="brand-banner-@brand.Id" value="@brand.Id" form="filter-form"
+                            @(Model.FilterDealsFormDTO.BrandId == brand.Id ? "checked" : "") />
+                            <label for="brand-banner-@brand.Id" class="brand-banner-card">
+                                <div class="brand-banner-logo">
+                                    <img src="@Url.Content($"~/{BrandLogoFileSettings.StoragePathOnServer}/{brand.ImageURL}")"
+                                         alt="@brand.Name" />
+                                </div>
+                                <div class="brand-banner-name">@brand.Name</div>
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <button type="button" class="scroll-btn scroll-right" onclick="scrollBrands(300)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-4 col-md-5">
+                <div class="filter-sidebar">
+                    <div class="filter-header">
+                        <h3><i class="fas fa-filter me-2"></i>Refine Your Search</h3>
+                    </div>
+
+                    <form id="filter-form" asp-action="Filter" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Date and Location Section -->
+                        <div class="filter-section">
+                            <h4 class="filter-section-title">Trip Details</h4>
+
+                            <div class="luxury-input-group mb-3">
+                                <label asp-for="FilterDealsFormDTO.Address" class="luxury-label">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Pick-Up Location
+                                </label>
+                                <input id="addressInput" asp-for="FilterDealsFormDTO.Address"
+                                       type="text" class="luxury-input" placeholder="Enter address" required />
+                            </div>
+
+                            <div class="luxury-input-group mb-3">
+                                <label asp-for="FilterDealsFormDTO.StartDate" class="luxury-label">
+                                    <i class="fas fa-calendar-alt me-2"></i>Pick-Up Date
+                                </label>
+                                <input id="startDateInput" name="FilterDealsFormDTO.StartDate"
+                                       value="@Model.FilterDealsFormDTO.StartDate.ToString("yyyy-MM-dd")"
+                                       type="date" class="luxury-input" required />
+                            </div>
+
+                            <div class="luxury-input-group mb-3">
+                                <label asp-for="FilterDealsFormDTO.EndDate" class="luxury-label">
+                                    <i class="fas fa-calendar-check me-2"></i>Drop-Off Date
+                                </label>
+                                <input id="endDateInput" name="FilterDealsFormDTO.EndDate"
+                                       value="@Model.FilterDealsFormDTO.EndDate.ToString("yyyy-MM-dd")"
+                                       type="date" class="luxury-input" required />
+                            </div>
+                        </div>
+
+                        <!-- Transmission Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-section-title">
+                                <i class="fas fa-cogs me-2"></i>Transmission
+                            </h4>
+                            <div class="filter-options-vertical">
+                                @foreach (var transmission in Model.CarTransmissionList)
+                                {
+                                    <div class="filter-option-item">
+                                        <input type="radio" class="btn-check" name="FilterDealsFormDTO.CarTransmission"
+                                               id="transmission-@((int)transmission)" value="@((int)transmission)"
+                                        @(Model.FilterDealsFormDTO.CarTransmission == transmission ? "checked" : "") />
+                                        <label class="filter-radio-label" for="transmission-@((int)transmission)">
+                                            @transmission
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Fuel Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-section-title">
+                                <i class="fas fa-gas-pump me-2"></i>Fuel Type
+                            </h4>
+                            <div class="filter-options-vertical">
+                                @foreach (var fuel in Model.CarFuelList)
+                                {
+                                    <div class="filter-option-item">
+                                        <input type="radio" class="btn-check" name="FilterDealsFormDTO.CarFuel"
+                                               id="fuel-@((int)fuel)" value="@((int)fuel)"
+                                        @(Model.FilterDealsFormDTO.CarFuel == fuel ? "checked" : "") />
+                                        <label class="filter-radio-label" for="fuel-@((int)fuel)">
+                                            @fuel
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Body Type Filter -->
+                        <div class="filter-section">
+                            <h4 class="filter-section-title">
+                                <i class="fas fa-car me-2"></i>Body Type
+                            </h4>
+                            <div class="filter-options-vertical">
+                                @foreach (var bodyType in Model.CarBodyTypeList)
+                                {
+                                    <div class="filter-option-item">
+                                        <input type="radio" class="btn-check" name="FilterDealsFormDTO.CarBodyType"
+                                               id="body-@((int)bodyType)" value="@((int)bodyType)"
+                                        @(Model.FilterDealsFormDTO.CarBodyType == bodyType ? "checked" : "") />
+                                        <label class="filter-radio-label" for="body-@((int)bodyType)">
+                                            @bodyType
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Features -->
+                        <div class="filter-section">
+                            <h4 class="filter-section-title">
+                                <i class="fas fa-star me-2"></i>Premium Features
+                            </h4>
+                            <div class="filter-options-vertical">
+                                @foreach (var feature in Model.FeatureList)
+                                {
+                                    <div class="filter-option-item">
+                                        <input type="checkbox" class="btn-check" name="FilterDealsFormDTO.FeatureIds"
+                                               id="feature-@feature.Id" value="@feature.Id"
+                                        @(Model.FilterDealsFormDTO.FeatureIds != null && Model.FilterDealsFormDTO.FeatureIds.Contains(feature.Id) ? "checked" : "") />
+                                        <label class="filter-checkbox-label" for="feature-@feature.Id">
+                                            <i class="fas fa-check me-2"></i>@feature.Name
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="filter-actions">
+                            <button type="submit" class="luxury-btn luxury-btn-primary w-100 mb-3">
+                                <i class="fas fa-search me-2"></i>Apply Filters
+                            </button>
+                            <a asp-action="Filter" class="luxury-btn luxury-btn-secondary w-100">
+                                <i class="fas fa-refresh me-2"></i>Clear All
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Cars Grid -->
+            <div class="col-lg-8 col-md-7">
+                <div class="cars-header">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h3 class="cars-title">Available Vehicles</h3>
+                            <p class="cars-subtitle">@Model.CarList.Count() vehicles found</p>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="btn btn-outline-success btn-sm active" onclick="toggleView('grid',event">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="btn btn-outline-success btn-sm" onclick="toggleView('list',event)">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="cars-container">
+                    @foreach (var car in Model.CarList)
+                    {
+                        <div class="car-card">
+                            <div class="car-image-container">
+                                <div class="car-image" style="background-image: url(data:image/*;base64,@car.CarImage);"></div>
+                                <div class="availability-badge">
+                                    @if (car.IsExist)
+                                    {
+                                        <span class="badge-available">
+                                            <i class="fas fa-check me-1"></i>Available
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-unavailable">
+                                            <i class="fas fa-times me-1"></i>Unavailable
+                                        </span>
+                                    }
+                                </div>
+                                <div class="car-overlay">
+                                    <div class="car-price-overlay">
+                                        <span class="price-amount">$@car.PricePerDay</span>
+                                        <span class="price-period">per day</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="car-details">
+                                <div class="car-header">
+                                    <h4 class="car-title">@car.Brand @car.Name</h4>
+                                    <span class="car-year">@car.Year</span>
+                                </div>
+
+                                <div class="car-specs">
+                                    <div class="spec-item">
+                                        <i class="fas fa-cogs"></i>
+                                        <span>@car.carTransmission</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <i class="fas fa-gas-pump"></i>
+                                        <span>@car.carFuel</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <i class="fas fa-car"></i>
+                                        <span>@car.carBodyType</span>
+                                    </div>
+                                </div>
+
+                                @if (car.Features.Any())
+                                {
+                                    <div class="car-features">
+                                        <div class="features-list">
+                                            @foreach (var feature in car.Features.Take(3))
+                                            {
+                                                <span class="feature-pill">@feature</span>
+                                            }
+                                            @if (car.Features.Count() > 3)
+                                            {
+                                                <span class="feature-more">+@(car.Features.Count() - 3) more</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="car-actions">
+                                    <form method="post" asp-action="Booking" asp-controller="Deals">
+                                        <input name="BookingViewModel.CarDTO.Id" value="@car.Id" type="hidden" />
+                                        <input name="BookingViewModel.BookingFormDTO.PricePerDay" value="@car.PricePerDay" type="hidden" />
+                                        <input name="BookingViewModel.BookingFormDTO.Address" value="@Model.FilterDealsFormDTO.Address" type="hidden" />
+                                        <input name="BookingViewModel.BookingFormDTO.BookingEndDate" value="@Model.FilterDealsFormDTO.EndDate.ToString("yyyy-MM-dd")" type="hidden" />
+                                        <input name="BookingViewModel.BookingFormDTO.BookingStartDate" value="@Model.FilterDealsFormDTO.StartDate.ToString("yyyy-MM-dd")" type="hidden" />
+
+                                        <button type="submit" class="luxury-btn luxury-btn-outline w-100">
+                                            <i class="fas fa-eye me-2"></i>View Deal
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Empty State -->
+                @if (!Model.CarList.Any())
+                {
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-car-side"></i>
+                        </div>
+                        <h3>No vehicles match your criteria</h3>
+                        <p>Try adjusting your filters to see more options</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Brand scrolling functionality
+        function scrollBrands(amount) {
+            const container = document.getElementById("brand-scroll-container");
+            container.scrollBy({
+                left: amount,
+                behavior: 'smooth'
+            });
+        }
+
+        // View toggle functionality
+        function toggleView(view, event) {
+            const container = document.getElementById('cars-container');
+            const buttons = document.querySelectorAll('.view-toggle button');
+
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Toggle view
+            if (view === 'list') {
+                container.classList.add('cars-list');
+                container.classList.remove('cars-grid');
+            } else {
+                container.classList.add('cars-grid');
+                container.classList.remove('cars-list');
+            }
+        }
+
+        // Radio button toggle functionality
+        $(document).ready(function () {
+            $('input[type="radio"]').on('click', function() {
+                if (this.wasChecked) {
+                    this.checked = false;
+                    this.wasChecked = false;
+                } else {
+                    this.wasChecked = true;
+                }
+            });
+
+            $('input[type="radio"]').on('change', function() {
+                $('input[name="' + this.name + '"]').prop('wasChecked', false);
+                this.wasChecked = true;
+            });
+        });
+
+        // Date validation
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.getElementById('startDateInput');
+            const endDateInput = document.getElementById('endDateInput');
+            const today = new Date().toISOString().split('T')[0];
+
+            startDateInput.setAttribute('min', today);
+            endDateInput.setAttribute('min', today);
+
+            startDateInput.addEventListener('change', function() {
+                endDateInput.setAttribute('min', this.value);
+            });
+        });
+    </script>
+}
+
+<style>
+    /* Base Styling */
+    .luxury-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        padding: 4rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><path d="M0,0v50c250,50 750,-50 1000,0v50H0z"/></svg>');
+            background-size: cover;
+        }
+
+    .luxury-title {
+        color: white;
+        font-size: 3.5rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .luxury-subtitle {
+        color: rgba(255,255,255,0.9);
+        font-size: 1.2rem;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
+    .hero-image {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-car {
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        transform: perspective(1000px) rotateY(-10deg);
+        transition: all 0.3s ease;
+    }
+
+        .hero-car:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        }
+
+    /* Brand Banner Section */
+    .brand-banner-section {
+        background: white;
+        padding: 3rem 0;
+        border-bottom: 1px solid #e9ecef;
+        position: relative;
+    }
+
+    .brand-banner-title {
+        color: #198754;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .brand-banner-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    .brand-banner-container {
+        position: relative;
+        padding: 0 4rem;
+    }
+
+    .brand-banner-slider {
+        display: flex;
+        overflow-x: auto;
+        gap: 2rem;
+        padding: 2rem 0;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+        .brand-banner-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+    .brand-banner-item {
+        flex: 0 0 auto;
+    }
+
+    .brand-banner-card {
+        display: block;
+        width: 180px;
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 20px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+        .brand-banner-card:hover {
+            border-color: #198754;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(25,135,84,0.2);
+        }
+
+    .btn-check:checked + .brand-banner-card {
+        border-color: #198754;
+        background: linear-gradient(135deg, #f8fff9, #e8f5e8);
+        box-shadow: 0 15px 35px rgba(25,135,84,0.25);
+        transform: translateY(-10px);
+    }
+
+    .brand-banner-logo {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+        .brand-banner-logo img {
+            max-width: 120px;
+            max-height: 70px;
+            object-fit: contain;
+        }
+
+    .brand-banner-name {
+        color: #198754;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        background: white;
+        border: 2px solid #198754;
+        border-radius: 50%;
+        color: #198754;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+        .scroll-btn:hover {
+            background: #198754;
+            color: white;
+            box-shadow: 0 8px 25px rgba(25,135,84,0.3);
+        }
+
+    .scroll-left {
+        left: 0;
+    }
+
+    .scroll-right {
+        right: 0;
+    }
+
+    /* Main Content */
+    .main-content {
+        padding: 3rem 0;
+    }
+
+    /* Filter Sidebar */
+    .filter-sidebar {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 1px solid rgba(25,135,84,0.1);
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+    }
+
+    .filter-header h3 {
+        color: #198754;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .filter-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f1f3f4;
+    }
+
+        .filter-section:last-of-type {
+            border-bottom: none;
+        }
+
+    .filter-section-title {
+        color: #198754;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .luxury-input-group {
+        position: relative;
+    }
+
+    .luxury-label {
+        color: #198754;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .luxury-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+        .luxury-input:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.2rem rgba(25,135,84,0.15);
+            outline: none;
+        }
+
+    .filter-options-vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filter-option-item {
+        position: relative;
+    }
+
+    .filter-radio-label, .filter-checkbox-label {
+        display: block;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        background: white;
+        color: #6c757d;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+        .filter-radio-label:hover, .filter-checkbox-label:hover {
+            border-color: #198754;
+            color: #198754;
+            background: #f8fff9;
+        }
+
+    .btn-check:checked + .filter-radio-label,
+    .btn-check:checked + .filter-checkbox-label {
+        background: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    .filter-checkbox-label i {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn-check:checked + .filter-checkbox-label i {
+        opacity: 1;
+    }
+
+    .filter-actions {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e9ecef;
+    }
+
+    /* Cars Section */
+    .cars-header {
+        margin-bottom: 2rem;
+    }
+
+    .cars-title {
+        color: #198754;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .cars-subtitle {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .view-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+        .view-toggle .btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+            .view-toggle .btn.active {
+                background: #198754;
+                border-color: #198754;
+                color: white;
+            }
+
+    /* Cars Grid */
+    .cars-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .cars-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+        .cars-list .car-card {
+            display: flex;
+            flex-direction: row;
+            height: auto;
+        }
+
+        .cars-list .car-image-container {
+            flex: 0 0 250px;
+            height: 200px;
+        }
+
+        .cars-list .car-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cars-list .car-overlay {
+            position: static;
+            background: transparent;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .cars-list .car-price-overlay {
+            position: static;
+            background: linear-gradient(135deg, #f8fff9, #e8f5e8);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #198754;
+        }
+
+    /* Car Cards */
+    .cars-section {
+        padding: 2rem 0;
+    }
+
+    .car-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(25,135,84,0.1);
+        height: 100%;
+    }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+    .car-image-container {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .car-image {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: all 0.3s ease;
+    }
+
+    .car-card:hover .car-image {
+        transform: scale(1.05);
+    }
+
+    .availability-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .badge-available {
+        background: #198754;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .badge-unavailable {
+        background: #6c757d;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .car-details {
+        padding: 1.5rem;
+    }
+
+    .car-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .car-title {
+        color: #198754;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .car-year {
+        color: #6c757d;
+        font-size: 0.9rem;
+        background: #f8f9fa;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+    }
+
+    .car-price {
+        background: linear-gradient(135deg, #f8fff9, #e8f5e8);
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        border-left: 4px solid #198754;
+    }
+
+    .price-amount {
+        color: #198754;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .price-period {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+    }
+
+    .car-specs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .spec-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+        background: #f8f9fa;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+    }
+
+        .spec-item i {
+            color: #198754;
+            font-size: 0.8rem;
+        }
+
+    .car-features {
+        margin-bottom: 1.5rem;
+    }
+
+        .car-features h6 {
+            color: #198754;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+    .features-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .feature-pill {
+        background: #e8f5e8;
+        color: #198754;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .feature-more {
+        color: #198754;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .car-actions {
+        border-top: 1px solid #f1f3f4;
+        padding-top: 1rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #6c757d;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        color: #dee2e6;
+    }
+
+    .empty-state h3 {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-weight: 300;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .luxury-title {
+            font-size: 2.5rem;
+        }
+
+        .filter-card {
+            padding: 1.5rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .luxury-btn {
+            width: 100%;
+        }
+
+        .brand-slider-container {
+            padding: 0 1rem;
+        }
+    }
+</style>
