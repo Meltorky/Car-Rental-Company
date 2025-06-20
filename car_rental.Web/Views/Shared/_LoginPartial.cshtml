@@ -8,12 +8,7 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a>
-            @* <h3>@User.IsInRole(ApplicationRoles.Admin.ToString())</h3> *@
-            @* @{ *@
-            @*     var user = await UserManager.GetUserAsync(User); *@
-            @* } *@
-            @* <h3>User ID: @user?.Id</h3> *@
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name <i class="bi bi-person-circle text-success"></i></a>
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
