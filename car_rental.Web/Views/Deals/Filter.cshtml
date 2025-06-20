@@ -4,15 +4,6 @@
 @model DealsViewModel
 
 <div class="luxury-container">
-    @* <!-- Hero Header --> *@
-    @* <div class="hero-section"> *@
-    @*     <div class="container"> *@
-    @*         <div class="text-center mb-5"> *@
-    @*             <h1 class="luxury-title">Premium Car Deals</h1> *@
-    @*             <p class="luxury-subtitle">Experience luxury with our exclusive vehicle collection</p> *@
-    @*         </div> *@
-    @*     </div> *@
-    @* </div> *@
 
     <!-- Filter Form -->
     <div class="container">
@@ -23,32 +14,32 @@
                 <!-- Brand Selection -->
                 <div class="filter-group mb-4">
                     <h3 class="filter-title">Select Brand</h3>
-                    <div class="brand-slider-container">
-                        <button type="button" class="scroll-btn scroll-left" onclick="scrollBrands(-300)">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
+                   <div class="brand-slider-container">
+                      <button type="button" class="scroll-btn scroll-left" onclick="scrollBrands(400)">
+                           <i class="fas fa-chevron-left"></i>
+                       </button> 
 
-                        <div id="brand-scroll-container" class="brand-slider">
-                            @foreach (var brand in Model.BrandList)
-                            {
+                       <div id="brand-scroll-container" class="brand-slider">
+                           @foreach (var brand in Model.BrandList)
+                             {
                                 <div class="brand-item">
-                                    <input type="radio" class="btn-check" name="FilterDealsFormDTO.BrandId"
-                                           id="brand-@brand.Id" value="@brand.Id"
+                                     <input type="radio" class="btn-check" name="FilterDealsFormDTO.BrandId"
+                                            id="brand-@brand.Id" value="@brand.Id"
                                     @(Model.FilterDealsFormDTO.BrandId == brand.Id ? "checked" : "") />
-                                    <label for="brand-@brand.Id" class="brand-card">
+                                     <label for="brand-@brand.Id" class="brand-card"> 
                                         <div class="brand-logo">
-                                            <img src="@Url.Content($"~/{BrandLogoFileSettings.StoragePathOnServer}/{brand.ImageURL}")"
-                                                 alt="@brand.Name" />
-                                        </div>
-                                    </label>
-                                </div>
-                            }
-                        </div>
+                                           <img src="@Url.Content($"~/{BrandLogoFileSettings.StoragePathOnServer}/{brand.ImageURL}")"
+                                                  alt="@brand.Name" />
+                                         </div>
+                                     </label> 
+                                 </div>
+                             }
+                       </div>
 
-                        <button type="button" class="scroll-btn scroll-right" onclick="scrollBrands(300)">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
+                        <button type="button" class="scroll-btn scroll-right" onclick="scrollBrands(-400)"> 
+                          <i class="fas fa-chevron-right"></i>
+                       </button>
+                     </div> 
                 </div>
 
 
@@ -271,7 +262,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
+	<script src="~/js/validatedates.js"></script>
     <script>
         // Brand scrolling functionality
         function scrollBrands(amount) {
@@ -281,6 +272,7 @@
                 behavior: 'smooth'
             });
         }
+
 
         // Radio button toggle functionality
         $(document).ready(function () {
@@ -296,20 +288,6 @@
             $('input[type="radio"]').on('change', function() {
                 $('input[name="' + this.name + '"]').prop('wasChecked', false);
                 this.wasChecked = true;
-            });
-        });
-
-        // Date validation
-        document.addEventListener('DOMContentLoaded', function () {
-            const startDateInput = document.getElementById('startDateInput');
-            const endDateInput = document.getElementById('endDateInput');
-            const today = new Date().toISOString().split('T')[0];
-
-            startDateInput.setAttribute('min', today);
-            endDateInput.setAttribute('min', today);
-
-            startDateInput.addEventListener('change', function() {
-                endDateInput.setAttribute('min', this.value);
             });
         });
     </script>
@@ -414,12 +392,12 @@
         display: inline-block;
     }
 
-        .luxury-filter-btn:hover {
-            border-color: #198754;
-            color: #198754;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(25,135,84,0.15);
-        }
+    .luxury-filter-btn:hover {
+        border-color: #198754;
+        color: #198754;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25,135,84,0.15);
+    }
 
     .btn-check:checked + .luxury-filter-btn {
         background: #198754;
@@ -432,6 +410,7 @@
     .brand-slider-container {
         position: relative;
         padding: 0 3rem;
+        overflow:hidden
     }
 
     .brand-slider {
