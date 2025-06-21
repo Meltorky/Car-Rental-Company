@@ -11,14 +11,15 @@
 	var user = await UserManager.GetUserAsync(User) ?? new();
 }
 
-<form asp-controller="Deals" asp-action="ConfirmBooking" method="post">
+<form asp-controller="Deals" asp-action="ConfirmBooking" method="post"
+	  >
 	@Html.AntiForgeryToken()
 	<div class="row g-4">
 		<div class="col-lg-8">
 
 			<input type="hidden" name="BookingViewModel.BookingFormDTO.UserId" value="@user.Id" />
-			<input type="text" name="BookingViewModel.BookingFormDTO.CarId" value="@Model.BookingViewModel.BookingFormDTO.CarId" />
-			<input type="text" name="BookingViewModel.BookingFormDTO.PricePerDay" value="@Model.BookingViewModel.CarDTO.PricePerDay" />
+			<input type="hidden" name="BookingViewModel.BookingFormDTO.CarId" value="@Model.BookingViewModel.BookingFormDTO.CarId" />
+			<input type="hidden" name="BookingViewModel.BookingFormDTO.PricePerDay" value="@Model.BookingViewModel.CarDTO.PricePerDay" />
 
 			<!-- Booking Details -->
 			<div class="card border border-1 border-success" style="border-radius: 15px;">

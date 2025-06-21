@@ -1,5 +1,10 @@
 ﻿@using car_rental.Application.DTOs.Deal
 @using car_rental.Application.DTOs.Filter
+@using Microsoft.AspNetCore.Identity
+@using car_rental.Domain.Identity.Enums
+@using car_rental.Domain.Identity.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @model PrimaryFilterDTO
 @{
 	ViewData["Title"] = "Home Page";
@@ -11,23 +16,50 @@
 <div class="background">
 	<p class="text-white">.</p>
 	<header class="header">
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light">
-			<div class="container-fluid mx-5">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">car_rental.Web</a>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-success border-top border-3">
+			<div class="container-fluid mx-5 row">
+				<a class="navbar-brand fw-bolder fs-3 text-success col-4 ms-3" asp-controller="Home" asp-action="Index">HEXINA</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between col-4">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+							<a class="nav-link text-success me-3 fw-bolder fs-6" asp-controller="Brands" asp-action="Index">Brands</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+							<a class="nav-link text-success me-3 fw-bolder fs-6" asp-controller="Features" asp-action="Index">Features</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-success me-3 fw-bolder fs-6" asp-controller="Cars" asp-action="Index">Cars</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-success fw-bolder me-3 fs-6" asp-area="" asp-controller="Cars" asp-action="Index">Bookings</a>
 						</li>
 					</ul>
-					<partial name="_LoginPartial" />
+					<ul class="navbar-nav align-items-center">
+						@if (SignInManager.IsSignedIn(User))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-circle text-success fw-bolder fs-3"></i></a>
+							</li>
+							<li class="nav-item ms-2">
+								<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+									<button type="submit" class="nav-link btn text-success fw-bolder fs-6">Logout</button>
+								</form>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="nav-link text-success fw-bolder fs-6" asp-area="Identity" asp-page="/Account/Register">Register</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-success fw-bolder fs-6" asp-area="Identity" asp-page="/Account/Login">Login</a>
+							</li>
+						}
+					</ul>
 				</div>
 			</div>
 		</nav>
@@ -35,9 +67,9 @@
 
 	<!-- Hero Section -->
 	<section>
-		<div class="container" style="margin-top:100px;">
+		<div class="container" style="margin-block:90px;">
 			<div class="row align-items-center">
-				<div class="col-lg-4 booking-card">
+				<div class="col-lg-4 booking-card border-success border-top border-3">
 					<form asp-action="FindDeals" asp-controller="Home" enctype="multipart/form-data" method="post" class="mb-2">
 						<div class="row justify-content-start">
 							<div class="mt-3">
@@ -78,22 +110,40 @@
 </div>
 
 <style>
+
 	.background {
-		background-image: url('assets\\images\\banners\\first-image.jpg');
+		background-image: url('assets/images/banners/first-image.jpg');
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
-		position:relative; /* Allow section to follow normal flow */
+		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100%;
-		height: 700px;
+		width: 100vw;
+		height: 100vh;
 		z-index: 1;
 	}
 
-	.header{
-		border:none;
-		border-radius:20px;
+	/* Ensure the content container is positioned properly */
+	.background > * {
+		position: relative;
+		z-index: 1;
+	}
+
+
+	/* Make sure the background covers fullscreen mode */
+	@@media (display-mode: fullscreen) {
+		.background
+
+	{
+		width: 100vw;
+		height: 100vh;
+	}
+
+	}
+
+	nav{
+		border-radius:15px;
 		background: rgba(255, 255, 255,0.6);
 		backdrop-filter: blur(10px);
 		margin-inline:100px;
@@ -107,7 +157,7 @@
 	.booking-card {
 		background: rgba(255, 255, 255,0.7);
 		backdrop-filter: blur(80px);
-		border-radius: 20px;
+		border-radius: 15px;
 		padding: 30px;
 		border: none;
 		max-width: 400px;
@@ -123,11 +173,11 @@
 		transition: all 0.3s ease;
 	}
 
-		.form-control:focus {
-			background: white;
-			box-shadow: 0 0 0 3px rgba(78, 205, 196, .5);
-			border: 2px solid var(--primary-teal);
-		}
+	.form-control:focus {
+		background: white;
+		box-shadow: 0 0 0 3px rgba(78, 205, 196, .5);
+		border: 2px solid var(--primary-teal);
+	}
 
 	.form-label {
 		font-weight: 600;

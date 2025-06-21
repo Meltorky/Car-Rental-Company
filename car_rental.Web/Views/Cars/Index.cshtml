@@ -7,12 +7,11 @@
     <div class="container">
         <!-- Elegant Header Section -->
         <div class="text-center mb-5">
-            <h1 class="display-4 fw-light text-dark mb-3" style="letter-spacing: 2px;">
+            <h1 class="display-4 fw-light text-success fw-bolder mb-3">
                 <i class="fas fa-car-side text-success me-3"></i>
-                @ViewData["Title"]
+                Car Manager
             </h1>
-            <div class="mx-auto" style="width: 100px; height: 3px; background: linear-gradient(90deg, #198754, #20c997);"></div>
-            <p class="lead text-muted mt-3">Discover our premium collection of luxury vehicles</p>
+            <a class="fw-bolder btn btn-success text-white btn-lg my-4" asp-controller="cars" asp-action="create"><i class="bi bi-plus-circle"></i> Add New Car</a>
         </div>
 
         <!-- Cars Grid -->
