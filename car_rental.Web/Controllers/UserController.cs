@@ -10,11 +10,13 @@ namespace car_rental.Web.Controllers
             _bookingService = bookingService;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Bookings(string userId)
         {
             return View(await _bookingService.GetUserBookings(userId));
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

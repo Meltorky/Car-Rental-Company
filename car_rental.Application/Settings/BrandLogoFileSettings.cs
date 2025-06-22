@@ -3,6 +3,6 @@
     public class BrandLogoFileSettings
     {
         public const string StoragePathOnServer = "assets/images/Brands";
-        
+  
     }
 }

@@ -24,7 +24,7 @@ namespace car_rental.Infrastructure.Repositories
         public new async Task<Car?> GetById(int Id)
         {
             return await _context.Set<Car>()
-                //.AsNoTracking()               // when i do it, the brandId and FeatureIds not updated
+                //.AsNoTracking()               // If I enable it, the brandId and FeatureIds will not update
                 .Include(b => b.Brand)
                 .Include(b => b.Bookings)
                 .Include(cf => cf.CarFeatures)

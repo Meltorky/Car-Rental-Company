@@ -5,6 +5,7 @@ using car_rental.Web.ViewModels.Cars;
 using car_rental.Web.Helpers;
 using car_rental.Web.UIService;
 using Microsoft.AspNetCore.Authorization;
+using car_rental.Domain.Identity.Enums;
 
 
 namespace car_rental.Web.Controllers
@@ -64,8 +65,9 @@ namespace car_rental.Web.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
+        [Authorize(Roles = nameof(ApplicationRoles.Admin))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CarFormViewModel vm)
         {
@@ -86,7 +88,7 @@ namespace car_rental.Web.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(ApplicationRoles.Admin))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Id) 
         {

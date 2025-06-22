@@ -38,7 +38,6 @@ namespace car_rental.Web.Controllers
                     Console.WriteLine(error.ErrorMessage);
                 }
 
-                //viewModel.Features = await _featureService.GetAll();
                 return View(nameof(Index), viewModel); 
             }
 
@@ -46,8 +45,9 @@ namespace car_rental.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(ApplicationRoles.Admin))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(FeatureViewModel viewModel)
         {
@@ -61,8 +61,9 @@ namespace car_rental.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(ApplicationRoles.Admin))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Id) 
         {

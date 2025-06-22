@@ -1,4 +1,5 @@
 ﻿using car_rental.Application.DTOs.Brand;
+using car_rental.Domain.Identity.Enums;
 using car_rental.Web.ViewModels.Brands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace car_rental.Web.Controllers
             _brandService = brandService;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -22,6 +24,7 @@ namespace car_rental.Web.Controllers
                 BrandList = await _brandService.GetAll()
             });
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -37,8 +40,9 @@ namespace car_rental.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
+        [Authorize(Roles = nameof(ApplicationRoles.Admin))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BrandViewModel viewModel) 
         {
@@ -52,8 +56,9 @@ namespace car_rental.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
+        [Authorize(Roles = nameof(ApplicationRoles.Admin))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Id) 
         {

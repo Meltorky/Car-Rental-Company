@@ -15,8 +15,6 @@ namespace car_rental.Web.Controllers
             _logger = logger;
         }
 
-
-
         [HttpPost]
         public IActionResult FindDeals(PrimaryFilterDTO dto) 
         {
@@ -26,16 +24,10 @@ namespace car_rental.Web.Controllers
             return RedirectToAction("Filter","Deals",dto);
         }
 
-
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
     }
 }
