@@ -1,0 +1,268 @@
+﻿@using car_rental.Application.DTOs.Bookings
+@model IEnumerable<BookingDTO>
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+@if (!Model.Any())
+{
+    <div class="row justify-items-center p-5 box-shadow shadow border border-success rounded rounded-5 border-5">
+        <h1 class="m-5 text-warning fw-bolder">
+            <i class="fas fa-car"></i>
+            You Hadn't Book Any Car Yet !
+        </h1>
+    </div>
+
+}
+else
+{
+    <!-- Cars Grid -->
+    <div class="cars-section">
+    <div class="row g-4">
+        <h1 class="m-1 text-center text-success fw-bolder">
+            My Previous Car Booking
+        </h1>
+        @foreach (var car in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="car-card">
+                    <div class="car-image-container">
+                        <div class="car-image" style="background-image: url(data:image/*;base64,@car.CarImage);"></div>
+                    </div>
+
+                    <div class="car-details">
+                        <div class="car-header">
+                            <h4 class="car-title">@car.CarBrand @car.CarName</h4>
+                        </div>
+
+                        <div class="car-price">
+                            <span class="price-amount">$@car.TotalCost</span>
+                            <span class="price-period">Total Cost</span>
+                        </div>
+
+                        <div class="car-specs">
+                            <div class="spec-item fw-bolder text-success">
+                                Address:                                <span>@car.Address</span>
+                            </div>
+                            <div class="spec-item fw-bolder text-success">
+                                Pick-Up Date:
+                                <span>@car.BookingStartDate</span>
+                            </div>
+                            <div class="spec-item fw-bolder text-success">
+                                Drop-Off Date
+                                <span>@car.BookingEndDate</span>
+                            </div>
+                        </div>
+
+                        <div class="car-actions d-flex justify-content-center">
+                            @if (car.BookingStartDate <= DateOnly.FromDateTime(DateTime.Today))
+                            {
+                                <button class="btn btn-danger fw-bolder text-white" disabled>Cancel Booking</button>
+
+                            }
+                            else
+                            {
+                                <form asp-controller="User" asp-action="CancelBooking" method="post">
+                                    <input type="hidden" name="bookingId" value="@car.BookingId" />
+                                    <input type="hidden" name="userId" value="@car.UserId" />
+                                    <button type="submit" class="btn btn-danger fw-bolder text-white">Cancel Booking</button>
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+}
+
+<style>
+    /* Car Cards */
+    .cars-section {
+        padding: 2rem 0;
+    }
+
+    .car-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(25,135,84,0.1);
+        height: 100%;
+    }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+    .car-image-container {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .car-image {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: all 0.3s ease;
+    }
+
+    .car-card:hover .car-image {
+        transform: scale(1.05);
+    }
+
+    .availability-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .badge-available {
+        background: #198754;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .badge-unavailable {
+        background: #6c757d;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .car-details {
+        padding: 1.5rem;
+    }
+
+    .car-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .car-title {
+        color: #198754;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .car-year {
+        color: #6c757d;
+        font-size: 0.9rem;
+        background: #f8f9fa;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+    }
+
+    .car-price {
+        background: linear-gradient(135deg, #f8fff9, #e8f5e8);
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        border-left: 4px solid #198754;
+    }
+
+    .price-amount {
+        color: #198754;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .price-period {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+    }
+
+    .car-specs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .spec-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+        background: #f8f9fa;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+    }
+
+        .spec-item i {
+            color: #198754;
+            font-size: 0.8rem;
+        }
+
+    .car-features {
+        margin-bottom: 1.5rem;
+    }
+
+        .car-features h6 {
+            color: #198754;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+    .features-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .feature-pill {
+        background: #e8f5e8;
+        color: #198754;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .feature-more {
+        color: #198754;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .car-actions {
+        border-top: 1px solid #f1f3f4;
+        padding-top: 1rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #6c757d;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        color: #dee2e6;
+    }
+
+    .empty-state h3 {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-weight: 300;
+    }
+</style>

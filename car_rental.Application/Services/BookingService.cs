@@ -23,5 +23,19 @@ namespace car_rental.Application.Services
             if (dto == null) return false;
             return await _bookingRepository.Add(dto.ToBookingEntity());
         }
+
+        public async Task<bool> CancelBooking(int bookingId)
+        {
+            var booking = await _bookingRepository.GetById(bookingId);
+            if (booking == null) return false;
+            return await _bookingRepository.Delete(booking);
+        }
+
+        public async Task<List<BookingDTO>> GetUserBookings(string UserId) 
+        {
+            var result = await _bookingRepository.GetByUserIdAsync(UserId);
+            return result.ToBookingDTOList();
+        }
+
     }
 }

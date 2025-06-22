@@ -9,5 +9,6 @@ namespace car_rental.Application.Interfaces.IRepositories
 {
     public interface IBookingRepository : IBaseRepository<Booking>
     {
+        Task<List<Booking>> GetByUserIdAsync(string id);
     }
 }

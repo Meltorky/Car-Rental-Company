@@ -1,5 +1,6 @@
 ﻿using car_rental.Application.DTOs.Brand;
 using car_rental.Web.ViewModels.Brands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace car_rental.Web.Controllers
@@ -36,6 +37,7 @@ namespace car_rental.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BrandViewModel viewModel) 
@@ -50,6 +52,7 @@ namespace car_rental.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Id) 

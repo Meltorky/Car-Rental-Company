@@ -4,9 +4,11 @@ using car_rental.Application.DTOs.Bookings;
 using car_rental.Application.DTOs.Car;
 using car_rental.Application.DTOs.Deal;
 using car_rental.Application.DTOs.Filter;
+using car_rental.Domain.Entities;
 using car_rental.Web.UIService;
 using car_rental.Web.ViewModels.Deals;
 using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
@@ -91,9 +93,10 @@ namespace car_rental.Web.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmBooking(DealsViewModel vm)
-        {
+        {   
             bool isValidDate = CheckDates(vm.BookingViewModel.BookingFormDTO.BookingStartDate,vm.BookingViewModel.BookingFormDTO.BookingEndDate);
 
             if (!isValidDate)
@@ -102,8 +105,9 @@ namespace car_rental.Web.Controllers
                 return View(vm);
             }
             var result = await _bookingService.AddBooking(vm.BookingViewModel.BookingFormDTO);
-            return View(nameof(Index),nameof(HomeController));
+            return RedirectToAction("Bookings",nameof(User), new { userId = vm.BookingViewModel.BookingFormDTO.UserId});
         }
+
 
         private bool CheckDates(DateOnly startDate,DateOnly endDate) 
         {

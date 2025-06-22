@@ -21,3 +21,4 @@ namespace car_rental.Web.Areas.Identity.Pages.Account
         }
     }
 }
+    

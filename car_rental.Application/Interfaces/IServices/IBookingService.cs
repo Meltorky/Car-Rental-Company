@@ -10,5 +10,7 @@ namespace car_rental.Application.Interfaces.IServices
     public interface IBookingService
     {
         Task<bool> AddBooking(BookingFormDTO dto);
+        Task<bool> CancelBooking(int bookingId);
+        Task<List<BookingDTO>> GetUserBookings(string UserId);
     }
 }

@@ -22,5 +22,28 @@ namespace car_rental.Application.Mappers
                 UserId = dto.UserId,             
             };
         }
+
+        public static List<BookingDTO> ToBookingDTOList(this List<Booking> list) 
+        {
+            var dtoList = new List<BookingDTO>();
+
+            foreach (var item in list) 
+            {
+                dtoList.Add(new BookingDTO 
+                {
+                    Address = item.Address,
+                    BookingStartDate = item.BookingStartDate,
+                    BookingEndDate = item.BookingEndDate,
+                    TotalCost = item.TotalCost,
+                    UserId = item.UserId,
+                    BookingId = item.BookingId,
+                    CarBrand = item.Car.Brand.Name,
+                    CarName = item.Car.Name,
+                    CarImage = Convert.ToBase64String(item.Car.CarImage)
+                });
+            }
+
+            return dtoList;
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using car_rental.Application.DTOs.Feature;
+using car_rental.Domain.Identity.Enums;
 using car_rental.Web.ViewModels.Features;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace car_rental.Web.Controllers
@@ -45,6 +47,7 @@ namespace car_rental.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(FeatureViewModel viewModel)
         {
@@ -59,6 +62,7 @@ namespace car_rental.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Id) 
         {

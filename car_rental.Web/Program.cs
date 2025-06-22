@@ -1,6 +1,7 @@
-
+﻿
 using car_rental.Web.Extentions;
 using car_rental.Web.UIService;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+builder.Services.AddAuthorization(options =>
+{
+    // You can define policies here if needed, but for simple role checks,
+    // the [Authorize(Roles = "Admin")] attribute is sufficient.
+});
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 {
@@ -18,9 +26,19 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o =>
     o.Password.RequiredLength = 6;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
+
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddRazorPages(); // Add this line
+
 
 // DI of Services Interfaces
 builder.Services.AddScoped<IFeatureService,FeatureService>();
@@ -70,11 +88,13 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.MapRazorPages();    // Needed for Identity Razor
+                        
+app.MapControllers();   // Needed for MVC Controllers
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapRazorPages();
 
 app.Run();
 

@@ -12,6 +12,10 @@
 @{
 	Layout = "~/Views/Shared/_mainPageLayout.cshtml";
 }
+@{
+	var user = await UserManager.GetUserAsync(User) ?? new();
+}
+
 
 <div class="background">
 	<p class="text-white">.</p>
@@ -35,7 +39,7 @@
 							<a class="nav-link text-success me-3 fw-bolder fs-6" asp-controller="Cars" asp-action="Index">Cars</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-success fw-bolder me-3 fs-6" asp-area="" asp-controller="Cars" asp-action="Index">Bookings</a>
+							<a class="nav-link text-success fw-bolder me-3 fs-6" asp-controller="User" asp-action="Bookings" asp-route-userId="@user.Id">Bookings</a>
 						</li>
 					</ul>
 					<ul class="navbar-nav align-items-center">
