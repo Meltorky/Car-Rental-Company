@@ -76,7 +76,7 @@ else
     app.UseHsts();
 }
 
-//await app.Services.IdentitySeeder();
+await app.Services.IdentitySeeder();
 
 app.UseHttpsRedirection();
 
