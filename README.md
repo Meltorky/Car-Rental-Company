@@ -1,5 +1,9 @@
 # 🚗 Hexina Car Rental Booking System
 
+![.NET 8](https://img.shields.io/badge/.NET-8.0-blueviolet)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+
 Hexina is a modern web application built with **ASP.NET 8 MVC** for managing car rentals. Users can register, log in, and book available cars. Admins can manage car brands, features, and inventory through a secure panel. The system features dynamic filtering and date-aware booking to prevent double reservations.
 
 ---
