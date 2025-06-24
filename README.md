@@ -73,3 +73,23 @@ You can run this project like any standard .NET 8 MVC application. 😉
 - Reusable base repository for all entities
 - Asynchronous methods for better performance
 - Booking logic ensures no car is double-booked, by preventing selection if already reserved for the selected date range.
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home](screenshots/home.png)
+
+### 📅 Deals Filter Page
+![Booking](screenshots/filter.png)
+
+### 📅 Deals Filter Page
+![Booking](screenshots/deals.png)
+
+### 📅 Confirm Booking Page
+![Booking](screenshots/confirm.png)
+
+### 📅 Previous Page
+![Booking](screenshots/previous.png)
+
+### 📅 Brands Manager Page
+![Booking](screenshots/manager.png)
