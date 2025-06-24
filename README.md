@@ -51,7 +51,7 @@ You can run this project like any standard .NET 8 MVC application. 😉
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/Meltorky/Car-Rental-Company.git
 2. Open the solution in Visual Studio 2022 or later
 
 3. Update appsettings.json
