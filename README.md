@@ -93,3 +93,4 @@ You can run this project like any standard .NET 8 MVC application. 😉
 
 ### 📅 Brands Manager Page
 ![Booking](screenshots/manager.png)
+
