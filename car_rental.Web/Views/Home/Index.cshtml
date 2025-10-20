@@ -113,7 +113,7 @@
 	</section>
 </div>
 
-<style>
+@* <style>
 
 	.background {
 		background-image: url('assets/images/banners/first-image.jpg');
@@ -212,6 +212,148 @@
 		.hero-title {
 			font-size: 3rem;
 		}
+	}
+</style> *@
+
+
+<style>
+	.background {
+		background-image: url('assets/images/banners/first-image.jpg');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		min-height: 100vh; /* Changed from height to min-height */
+		z-index: 1;
+	}
+
+		/* Ensure the content container is positioned properly */
+		.background > * {
+			position: relative;
+			z-index: 1;
+		}
+
+	/* Allow scrolling on small screens */
+	body {
+		overflow-y: auto;
+	}
+
+	nav {
+		border-radius: 15px;
+		background: rgba(255, 255, 255, 0.6);
+		backdrop-filter: blur(10px);
+		margin-inline: 100px;
+	}
+
+	/* Better navbar toggler styling */
+	.navbar-toggler {
+		border: 2px solid #198754;
+		background: rgba(255, 255, 255, 0.9);
+		padding: 8px 12px;
+	}
+
+		.navbar-toggler:focus {
+			box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.25);
+		}
+
+	.navbar-toggler-icon {
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23198754' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+	}
+
+	.button {
+		width: 100%;
+		border-radius: 8px;
+	}
+
+	.booking-card {
+		background: rgba(255, 255, 255, 0.7);
+		backdrop-filter: blur(80px);
+		border-radius: 15px;
+		padding: 30px;
+		border: none;
+		max-width: 400px;
+	}
+
+	.form-control {
+		border: 1px solid #e0e0e0;
+		background: white;
+		border-radius: 10px;
+		padding: 15px;
+		font-size: 0.95rem;
+		margin-bottom: 15px;
+		transition: all 0.3s ease;
+	}
+
+		.form-control:focus {
+			background: white;
+			box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.5);
+			border: 2px solid #198754;
+		}
+
+	.form-label {
+		font-weight: 600;
+		color: #333;
+		margin-bottom: 8px;
+	}
+
+	/* Mobile responsiveness */
+	@@media (max-width: 768px) {
+		.background
+
+	{
+		position: absolute; /* Changed from fixed */
+		min-height: 100%; /* Allow content to extend */
+	}
+
+	nav {
+		margin-inline: 20px;
+	}
+
+	.booking-card {
+		margin: 20px;
+		max-width: calc(100% - 40px);
+		background: rgba(255, 255, 255, 0.85);
+	}
+
+	.navbar-collapse {
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+		border-radius: 10px;
+		padding: 15px;
+		margin-top: 10px;
+	}
+
+		/* Better spacing for collapsed menu items */
+		.navbar-collapse .nav-item {
+			padding: 5px 0;
+		}
+
+	}
+
+	@@media (max-width: 992px) {
+		nav
+
+	{
+		margin-inline: 50px;
+	}
+
+	}
+
+	@@media (max-width: 576px) {
+		nav
+
+	{
+		margin-inline: 10px;
+	}
+
+	.container-fluid.mx-5 {
+		margin-left: 1rem !important;
+		margin-right: 1rem !important;
+	}
+
 	}
 </style>
 
