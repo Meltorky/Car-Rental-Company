@@ -74,6 +74,78 @@ You can run this project like any standard .NET 8 MVC application. 😉
 - Asynchronous methods for better performance
 - Booking logic ensures no car is double-booked, by preventing selection if already reserved for the selected date range.
 
+---
+
+## Database Schema
+```mermaid
+erDiagram
+    BaseEntity {
+        int Id PK
+        string Name
+    }
+    
+    ApplicationUser {
+        string Id PK
+        string UserName
+        string Email
+        string FullName
+    }
+    
+    Brand {
+        int Id PK
+        string Name
+        string ImageUrl
+    }
+    
+    Car {
+        int Id PK
+        string Name
+        byte[] CarImage
+        double PricePerDay
+        int Year
+        CarTransmission carTransmission
+        CarFuel carFuel
+        CarBodyType carBodyType
+        bool IsExist
+        int BrandId FK
+    }
+    
+    Feature {
+        int Id PK
+        string Name
+    }
+    
+    CarFeature {
+        int CarId FK
+        int FeatureId FK
+    }
+    
+    Booking {
+        int BookingId PK
+        DateOnly BookingStartDate
+        DateOnly BookingEndDate
+        double TotalCost
+        string Address
+        string UserId FK
+        int CarId FK
+    }
+    
+    BaseEntity ||--|| Brand : "inherits"
+    BaseEntity ||--|| Car : "inherits"
+    BaseEntity ||--|| Feature : "inherits"
+    
+    Brand ||--o{ Car : "has many"
+    Car ||--o{ CarFeature : "has"
+    Feature ||--o{ CarFeature : "belongs to"
+    
+    ApplicationUser ||--o{ Booking : "makes many"
+    Car ||--o{ Booking : "booked in"
+    
+    ApplicationUser ||--|| IdentityUser : "inherits"
+```
+
+---
+
 ## 📸 Screenshots
 
 ### 🏠 Home Page
